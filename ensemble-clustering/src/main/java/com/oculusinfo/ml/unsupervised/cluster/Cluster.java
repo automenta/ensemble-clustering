@@ -24,18 +24,12 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.Feature;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import java.util.*;
 
 /***
  * A class that represents a cluster.  
@@ -80,9 +74,9 @@ public class Cluster extends Instance {
 	@SuppressWarnings("rawtypes")
 	public void reset() {
 		this.members.clear();
-		for (String name : centroids.keySet()) {
+		for (Map.Entry<String, Centroid> stringCentroidEntry : centroids.entrySet()) {
 			try {
-				Centroid centroid = centroids.get(name);
+				Centroid centroid = stringCentroidEntry.getValue();
 				centroid.reset();
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
@@ -92,16 +86,16 @@ public class Cluster extends Instance {
 	}
 	
 	public void updateCentroid() {
-		for (String name : centroids.keySet()) {
-			addFeature(centroids.get(name).getCentroid());
+		for (Map.Entry<String, Centroid> stringCentroidEntry : centroids.entrySet()) {
+			addFeature(stringCentroidEntry.getValue().getCentroid());
 		}
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void updateCentroids(Instance inst, boolean removefrom) {
-		for (String featureName : centroids.keySet()) {
-			Centroid m = centroids.get(featureName);
-			Feature feature = inst.getFeature(featureName);
+		for (Map.Entry<String, Centroid> stringCentroidEntry : centroids.entrySet()) {
+			Centroid m = stringCentroidEntry.getValue();
+			Feature feature = inst.getFeature(stringCentroidEntry.getKey());
 			if (feature != null) {
 				if (removefrom) {
 					m.remove(feature);
@@ -193,7 +187,7 @@ public class Cluster extends Instance {
 		if (printMembers) {
 			str.append("\nMembers:\n");
 			for (Instance inst : this.getMembers()) {
-				str.append(inst.toString() + "\n");
+				str.append(inst.toString()).append('\n');
 			}
 		}
 		return str.toString();

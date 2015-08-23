@@ -24,25 +24,20 @@
  */
 package com.oculusinfo.ml.stats;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.oculusinfo.geometry.geodesic.Track;
 import com.oculusinfo.math.statistics.StatTracker;
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.feature.Feature;
 import com.oculusinfo.ml.feature.spatial.TrackFeature;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * This class takes a cluster of tracks, and compiles the various statistics
@@ -189,14 +184,12 @@ public class TrackClusterWrapper {
 
     private void compileStatistics () {
         for (Track track: _tracks) {
-            Map<String, Double> trackStats = track.getStatistics();
-            for (Entry<String, Double> entry: trackStats.entrySet()) {
-                String statName = entry.getKey();
-                double statVal = entry.getValue();
+            ObjectDoubleHashMap<String> trackStats = track.getStatistics();
+            trackStats.forEachKeyValue((statName,statVal) -> {
                 if (!_statistics.containsKey(statName))
                     _statistics.put(statName, new StatTracker());
                 _statistics.get(statName).addStat(statVal);
-            }
+            });
         }
     }
 
@@ -259,10 +252,10 @@ public class TrackClusterWrapper {
     public String getClusterDescription () {
         String description = String.format("Cluster %s: %d items, %.1f long, std. dev.=%.4f",
                                            _clusterName, _tracks.size(), _practicalMean.getLength(), _standardDeviation);
-        for (String statName: _statistics.keySet()) {
-            StatTracker stat = _statistics.get(statName);
+        for (Entry<String, StatTracker> stringStatTrackerEntry : _statistics.entrySet()) {
+            StatTracker stat = stringStatTrackerEntry.getValue();
             description += String.format("\n\t%s:%.4f\n\t    [%.4f to %4f],\n\t     sd=%.4f",
-                                         statName,
+                    stringStatTrackerEntry.getKey(),
                                          stat.mean(), stat.min(), stat.max(), stat.standardDeviation());
         }
         return description;

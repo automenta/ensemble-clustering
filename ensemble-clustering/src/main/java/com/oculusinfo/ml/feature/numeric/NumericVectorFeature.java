@@ -24,9 +24,6 @@
  */
 package com.oculusinfo.ml.feature.numeric;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.oculusinfo.ml.feature.Feature;
 
 /***
@@ -43,18 +40,18 @@ public class NumericVectorFeature extends Feature {
 	
 	private String vectorToString() {
 		StringBuilder str = new StringBuilder();
-		str.append("[");
+		str.append('[');
 		for (int i=0; i < vector.length; i++) {
 			str.append(vector[i]);
-			if (i < vector.length - 1) str.append(";");
+			if (i < vector.length - 1) str.append(';');
 		}
-		str.append("]");
+		str.append(']');
 		return str.toString();
 	}
 	
 	@Override
 	public String toString() {
-		return (this.getName() + ":" + vectorToString());
+		return (this.getName() + ':' + vectorToString());
 	}
 	
 	public NumericVectorFeature() {
@@ -69,9 +66,9 @@ public class NumericVectorFeature extends Feature {
 		this.vector = vector;
 	}
 	
-	public void setValue(List<Double> vector) {
-		setValue(new ArrayList<Double>(vector));
-	}
+//	public void setValue(List<Double> vector) {
+//		setValue(new ArrayList<Double>(vector));
+//	}
 	
 	public double[] getValue() {
 		return this.vector;

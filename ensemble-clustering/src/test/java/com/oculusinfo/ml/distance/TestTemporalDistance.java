@@ -23,19 +23,13 @@
  * SOFTWARE.
  */
 package com.oculusinfo.ml.distance;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.oculusinfo.ml.feature.temporal.TemporalFeature;
 import com.oculusinfo.ml.feature.temporal.distance.TemporalDistance;
+import org.junit.Test;
+
+import java.util.*;
+
+import static org.junit.Assert.assertTrue;
 
 
 public class TestTemporalDistance {
@@ -867,7 +861,7 @@ public class TestTemporalDistance {
 		double expected = 0.8622467771639043;
 		long start = System.currentTimeMillis();
 		double distance = 0;
-		for (int i=0; i < 300000*30000; i++) {
+		for (int i=0; i < 300000/**30000*/; i++) {
 //			distance = d.distance(t1, t2);
 //			distance = d.aveMinDistance(set1, set2);
 			distance = d.aveMinDistance(Collections.singletonList(t1), Collections.singletonList(t2));

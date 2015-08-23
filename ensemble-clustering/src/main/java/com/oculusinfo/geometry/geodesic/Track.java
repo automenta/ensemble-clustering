@@ -24,14 +24,10 @@
  */
 package com.oculusinfo.geometry.geodesic;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.oculusinfo.math.linearalgebra.ListUtilities;
+
+import java.util.*;
 
 abstract public class Track {
     private PositionCalculationParameters _parameters;
@@ -39,7 +35,7 @@ abstract public class Track {
     private List<Double>                  _parameterization;
     private double                        _length;
     private Track                         _reverse;
-    private Map<String, Double>           _statistics;
+    private ObjectDoubleHashMap<String> _statistics;
 
     protected Track (PositionCalculationParameters parameters, Position... points) {
         this(parameters, Arrays.asList(points));
@@ -289,14 +285,14 @@ abstract public class Track {
     public String toString () {
         StringBuffer result = new StringBuffer();
         result.append(getLabel());
-        result.append("<");
+        result.append('<');
         result.append(getParameters().getCalculationType());
         result.append(">[");
         for (int i=0; i<_points.size(); ++ i) {
             if (0 < i) result.append(", ");
             result.append(_points.get(i));
         }
-        result.append("]");
+        result.append(']');
         return result.toString();
     }
 
@@ -406,12 +402,12 @@ abstract public class Track {
 
     public void addStatistic (String statName, double stat) {
         if (null == _statistics)
-            _statistics = new HashMap<String, Double>();
+            _statistics = new ObjectDoubleHashMap<String>();
 
         _statistics.put(statName, stat);
     }
 
-    public Map<String, Double> getStatistics () {
+    public ObjectDoubleHashMap<String> getStatistics () {
         return _statistics;
     }
 }

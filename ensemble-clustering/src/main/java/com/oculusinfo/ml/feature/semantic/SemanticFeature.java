@@ -97,14 +97,14 @@ public class SemanticFeature extends Feature {
 		StringBuilder output = new StringBuilder();
 		output.append(this.getId());
 		if (label != null && !suppressLabel) {
-			output.append(":" + label);
+			output.append(':').append(label);
 		}
 		return output.toString();
 	}
 	
 	@Override
 	public String getId() {
-		return (name + ":" + concept); // + ":" + uri);
+		return (name + ':' + concept); // + ":" + uri);
 	}
 
 	@Override

@@ -56,6 +56,6 @@ public class StringFeature extends Feature {
 	
 	@Override
 	public String toString() {
-		return this.getName() + ":" + value;
+		return this.getName() + ':' + value;
 	}
 }

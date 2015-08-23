@@ -24,13 +24,13 @@
  */
 package com.oculusinfo.ml.distance;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Collections;
-import org.junit.Test;
-
 import com.oculusinfo.ml.feature.spatial.GeoSpatialFeature;
 import com.oculusinfo.ml.feature.spatial.distance.EquitangularDistance;
+import org.junit.Test;
+
+import java.util.Collections;
+
+import static org.junit.Assert.assertTrue;
 
 public class TestEquitangularDistance {
 	
@@ -333,7 +333,7 @@ public class TestEquitangularDistance {
 		
 		long start = System.currentTimeMillis();
 		double distance = 0;
-		for (int i=0; i < 30000*3000; i++) {
+		for (int i=0; i < 30000/**3000*/; i++) {
 //			distance = d.distance(t1, t2);
 			distance = d.aveMinDistance(Collections.singletonList(t1), Collections.singletonList(t2));
 		}

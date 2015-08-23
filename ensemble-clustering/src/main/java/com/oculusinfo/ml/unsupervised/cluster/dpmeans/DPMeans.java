@@ -24,15 +24,16 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster.dpmeans;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import com.oculusinfo.ml.DataSet;
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
 import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
 import com.oculusinfo.ml.unsupervised.cluster.kmeans.KMeans;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /***
  * The class implements the DP-Means clustering algorithm:
@@ -108,7 +109,8 @@ public class DPMeans extends KMeans {
 		int iteration = 0;
 		
 		while (!converged && iteration < maxIterations) {
-			log.info("DP-Means iteration {}", (iteration+1));
+			if (log.isInfoEnabled())
+				log.info("DP-Means iteration {}", (iteration+1));
 			
 			for (Cluster mean : kmeans) {
 				mean.reset();
@@ -129,10 +131,12 @@ public class DPMeans extends KMeans {
 		
 			iteration++;
 		}
-		log.info("DP-Means completed with {} iterations", iteration);
-		
-		double clusterTime = System.currentTimeMillis() - start;
-		log.info("Clustering time (s): {}", clusterTime / 1000);
+
+		if (log.isInfoEnabled()) {
+			log.info("DP-Means completed with {} iterations", iteration);
+			double clusterTime = System.currentTimeMillis() - start;
+			log.info("Clustering time (s): {}", clusterTime / 1000);
+		}
 		
 		return clusters; //new InMemoryClusterResult(kmeans);
 	}

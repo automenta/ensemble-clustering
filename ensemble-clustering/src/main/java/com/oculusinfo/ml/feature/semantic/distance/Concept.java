@@ -146,11 +146,11 @@ public class Concept implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		str.append(this.name + "\n");
+		str.append(this.name).append('\n');
 		StringBuilder prefix = new StringBuilder();
-		for (int i=0; i < this.getDepth(); i++) prefix.append("-");
+		for (int i=0; i < this.getDepth(); i++) prefix.append('-');
 		for (Concept child: children) {
-			str.append(prefix + child.toString());
+			str.append(prefix).append(child.toString());
 		}
 		return str.toString();
 	}

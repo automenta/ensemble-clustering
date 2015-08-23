@@ -71,17 +71,17 @@ public class TrackCentroidTests {
 
         TrackCentroid centroid = new TrackCentroid();
         centroid.add(a);
-        Assert.assertEquals(a.getValue(), getCentroid(centroid));
+        Assert.assertEquals(a.getValue(), getCentroid(centroid).getValue());
         centroid.add(b);
-        Assert.assertEquals(ab, getCentroid(centroid));
+        Assert.assertEquals(ab, getCentroid(centroid).getValue());
         centroid.add(c);
-        Assert.assertEquals(abc, getCentroid(centroid));
+        Assert.assertEquals(abc, getCentroid(centroid).getValue());
         centroid.remove(c);
-        Assert.assertEquals(ab, getCentroid(centroid));
+        Assert.assertEquals(ab, getCentroid(centroid).getValue());
         centroid.remove(b);
-        Assert.assertEquals(a.getValue(), getCentroid(centroid));
+        Assert.assertEquals(a.getValue(), getCentroid(centroid).getValue());
         centroid.remove(a);
-        Assert.assertNull(getCentroid(centroid));
+        Assert.assertNull(getCentroid(centroid).getValue());
     }
 
     private TrackFeature getCentroid (TrackCentroid centroid) {

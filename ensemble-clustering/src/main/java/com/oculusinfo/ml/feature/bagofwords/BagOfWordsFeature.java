@@ -92,14 +92,14 @@ public class BagOfWordsFeature extends Feature {
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		str.append(this.getName() + ":[");
+		str.append(this.getName()).append(":[");
 		int i=1;
 		for (FeatureFrequency f : freqTable.getAll()) {
-			str.append(f.feature.getName() + "=" + f.frequency);
-			if (i < freqTable.getAll().size()) str.append(";");
+			str.append(f.feature.getName()).append("=").append(f.frequency);
+			if (i < freqTable.getAll().size()) str.append(';');
 			i++;
 		}
-		str.append("]");	
+		str.append(']');
 		
 		return str.toString();
 	}

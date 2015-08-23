@@ -25,6 +25,7 @@
 
 package com.oculusinfo.ml.utils;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -55,9 +56,7 @@ public class StringTools {
     	
     	// sort tokens and combine into new string
     	TreeSet<String> set = new TreeSet<String>();
-        for (String token : tokens) {
-            set.add(token); // order fragments and dedupe
-        }
+        Collections.addAll(set, tokens);
         
         StringBuffer fingerPrint = new StringBuffer();
         Iterator<String> i = set.iterator();

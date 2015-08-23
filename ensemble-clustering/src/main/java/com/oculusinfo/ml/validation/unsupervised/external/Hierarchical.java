@@ -24,10 +24,10 @@
  */
 package com.oculusinfo.ml.validation.unsupervised.external;
 
-import java.util.Collection;
-
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
+
+import java.util.Collection;
 
 public class Hierarchical {
 	@SuppressWarnings("unused")
@@ -42,7 +42,7 @@ public class Hierarchical {
 		this.alpha = alpha;
 	}
 	
-	private class Score {
+	private static class Score {
 		public double precision = 0;
 		public double recall = 0;
 		public double f = 0;

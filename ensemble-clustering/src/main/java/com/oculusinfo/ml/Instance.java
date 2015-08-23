@@ -115,11 +115,11 @@ public class Instance implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-		str.append("\"id:" + id + "\",");
+		str.append("\"id:").append(id).append("\",");
 		int i = 1;
 		for (Feature feature : features.values()) {
-			str.append("\"" + feature.toString() + "\"");
-			if (i < features.size()) str.append(",");
+			str.append('"').append(feature.toString()).append('"');
+			if (i < features.size()) str.append(',');
 			i++;
 		}
 		return str.toString();
@@ -198,7 +198,7 @@ public class Instance implements Serializable {
 	 * @param feature Map to add
 	 */
 	public void setFeatures(Map<String, Feature> features) {
-		features.putAll(features);
+		this.features.putAll(features);
 	}
 
 	/***

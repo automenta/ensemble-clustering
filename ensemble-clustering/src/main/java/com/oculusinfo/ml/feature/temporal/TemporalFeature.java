@@ -43,7 +43,7 @@ public class TemporalFeature extends Feature {
 	
 	@Override
 	public String toString() {
-		return (this.getName() + ":[" + start + "; " + end + "]");
+		return (this.getName() + ":[" + start + "; " + end + ']');
 	}
 	
 	public TemporalFeature() {

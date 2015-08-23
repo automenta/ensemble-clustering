@@ -61,18 +61,12 @@ public abstract class AbstractClusterer extends BaseClusterer {
 	
 	protected double maxDistance = 1.0;
 	
-	protected static Logger log = LoggerFactory.getLogger("com.oculusinfo");
+	protected static final Logger log = LoggerFactory.getLogger("com.oculusinfo");
 	protected ExecutorService exec; // = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL); //.newSingleThreadExecutor();;
 	
 	@Override
 	public void init() {
-		exec = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL, new ThreadFactory() {
-			
-			@Override
-			public Thread newThread(Runnable r) {
-				return new Thread(r, "Clusterer Pool");
-			}
-		}); //.newSingleThreadExecutor();
+		exec = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL, new MyThreadFactory()); //.newSingleThreadExecutor();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			public void run(){
@@ -99,11 +93,11 @@ public abstract class AbstractClusterer extends BaseClusterer {
 //			log.info("Clusterer thread pool shutdown");
 		}
 		catch (Exception e) {
-			log.error("Clusterer thread pool did not shut down gracefully");
+			log.error("Clusterer thread pool did not shut down gracefully", e);
 		}
 	}
 	
-	protected class DistanceResult {
+	protected static class DistanceResult {
 		public final Instance i;
 		public final Cluster c;
 		public final double distance;
@@ -150,9 +144,9 @@ public abstract class AbstractClusterer extends BaseClusterer {
 	 * 
 	 * @param logger
 	 */
-	public void setLogger(Logger logger) {		
+/*	public void setLogger(Logger logger) {
 		log = logger;
-	}
+	}*/
 	
 	/***
 	 * Return the executor service the clusterer is using for parallelization.
@@ -317,5 +311,13 @@ public abstract class AbstractClusterer extends BaseClusterer {
 		}
 		
 		return totalDist;
+	}
+
+	private static class MyThreadFactory implements ThreadFactory {
+
+		@Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "Clusterer Pool");
+        }
 	}
 }

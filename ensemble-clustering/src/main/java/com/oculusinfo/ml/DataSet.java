@@ -24,21 +24,11 @@
  */
 package com.oculusinfo.ml;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
-
 import com.oculusinfo.ml.feature.Feature;
 import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
+
+import java.io.Serializable;
+import java.util.*;
 
 /***
  * DataSet represents a structured collection of data instances that is the input 
@@ -52,26 +42,7 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	
 	private final Map<String, Instance> map = new LinkedHashMap<String, Instance>();
 
-	private class DataSetIterator implements Iterator<Instance> {
-		Iterator<Entry<String, Instance>> iterator;
-		
-		public DataSetIterator(Map<String, Instance> map) {
-			this.iterator = map.entrySet().iterator();
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return iterator.hasNext();
-		}
-		@Override
-		public Instance next() {
-			return iterator.next().getValue();
-		}
-		@Override
-		public void remove() {
-			iterator.remove();
-		}
-	};
+	;
 	
 	public Set<String> getKeys() {
 		return map.keySet();
@@ -295,7 +266,8 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * @return true if the Instance is a member of the DataSet
 	 */
 	public boolean contains(Instance inst) {
-		return map.containsKey(inst);
+		//return map.containsKey(inst);
+		return map.containsValue(inst);
 	}
 
 	/***

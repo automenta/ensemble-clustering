@@ -24,16 +24,17 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster.kmeans;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import com.oculusinfo.ml.DataSet;
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.unsupervised.cluster.AbstractClusterer;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
 import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
 import com.oculusinfo.ml.unsupervised.cluster.InMemoryClusterResult;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /***
  * The class implements the K-Means clustering algorithm using the K++ method for initializing the k-means
@@ -136,7 +137,9 @@ public class KMeans extends AbstractClusterer {
 		int iteration = 0;
 		
 		while (iteration < maxIterations) {
-			log.info("K-Means iteration {}", (iteration+1));
+
+			if (log.isInfoEnabled())
+				log.info("K-Means iteration {}", (iteration+1));
 			
 			for (Cluster mean : kmeans) {
 				mean.reset();
@@ -155,10 +158,12 @@ public class KMeans extends AbstractClusterer {
 			
 			iteration++;
 		}
-		log.info("K-Means completed with {} iterations", iteration);
-		
-		double clusterTime = System.currentTimeMillis() - start;
-		log.info("Clustering time (s): {}", clusterTime / 1000);
+
+		if (log.isInfoEnabled()) {
+			log.info("K-Means completed with {} iterations", iteration);
+			double clusterTime = System.currentTimeMillis() - start;
+			log.info("Clustering time (s): {}", clusterTime / 1000);
+		}
 		
 		return new InMemoryClusterResult(kmeans);
 	}

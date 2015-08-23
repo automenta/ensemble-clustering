@@ -87,7 +87,7 @@ public abstract class DistanceFunction<T> implements Serializable {
 		}
 		return cover;
 	}
-	
+
 	/***
 	 * Method to calculate the average minimum distance between two collections of objects.
 	 * 

@@ -24,15 +24,10 @@
  */
 package com.oculusinfo.ml.validation.unsupervised.external;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
+
+import java.util.*;
 
 /***
  * An external clustering validation implementation of Normalized Mutual Information
@@ -99,8 +94,8 @@ public class NormMutualInformation {
 		norm = 0.5 * (-1 * factor1 - factor2);
 		
 		// calculate the mutual information for all events and clusters
-		for (String label : events.keySet()) {
-			mi += getMI(numInstances, events.get(label), clusters);
+		for (Map.Entry<String, Collection<Instance>> stringCollectionEntry : events.entrySet()) {
+			mi += getMI(numInstances, stringCollectionEntry.getValue(), clusters);
 		}
 		// return normalized nmi
 		return (mi / norm);

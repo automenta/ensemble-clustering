@@ -103,8 +103,8 @@ public class FeatureTable implements Serializable {
 		for (Collection<Feature> features : table.values()) {
 			int i = 1;
 			for (Feature f : features) {
-				str.append(prefix + f);
-				if (i < features.size()) str.append(",");
+				str.append(prefix).append(f);
+				if (i < features.size()) str.append(',');
 				i++;
 			}
 		}

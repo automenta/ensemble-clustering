@@ -24,13 +24,14 @@
  */
 package com.oculusinfo.ml.distance;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Collections;
-import org.junit.Test;
-
 import com.oculusinfo.ml.feature.spatial.GeoSpatialFeature;
 import com.oculusinfo.ml.feature.spatial.distance.HaversineDistance;
+import org.junit.Test;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 public class TestHaversineDistance {
 	
@@ -333,9 +334,11 @@ public class TestHaversineDistance {
 		
 		long start = System.currentTimeMillis();
 		double distance = 0;
-		for (int i=0; i < 30000*3000; i++) {
+		final List<GeoSpatialFeature> tl1 = Collections.singletonList(t1);
+		final List<GeoSpatialFeature> tl2 = Collections.singletonList(t2);
+		for (int i=0; i < 30000/*3000*/; i++) {
 //			distance = d.distance(t1, t2);
-			distance = d.aveMinDistance(Collections.singletonList(t1), Collections.singletonList(t2));
+			distance = d.aveMinDistance(tl1, tl2);
 		}
 		double distanceTime = System.currentTimeMillis() - start;
 		System.out.println("Time: " + distanceTime/1000);

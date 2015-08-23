@@ -23,14 +23,14 @@
  * SOFTWARE.
  */package com.oculusinfo.geometry.cartesian;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.oculusinfo.math.linearalgebra.TriDiagonalMatrix;
+import com.oculusinfo.math.linearalgebra.Vector;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.oculusinfo.math.linearalgebra.TriDiagonalMatrix;
-import com.oculusinfo.math.linearalgebra.Vector;
 
 
 
@@ -38,12 +38,13 @@ public class CubicBSpline {
 //    private boolean      _periodic;
     private int          _n;
     private List<Vector> _points;
-    private List<Double> _times;
+    //private List<Double> _times;
+    private DoubleArrayList _times;
 
     public CubicBSpline (boolean periodic) {
 //        _periodic = periodic;
         _points = new ArrayList<Vector>();
-        _times = new ArrayList<Double>();
+        _times = new DoubleArrayList(); //ArrayList<Double>();
         _n = 0;
     }
 
@@ -125,7 +126,7 @@ public class CubicBSpline {
         double t0 = times[0];
         double tn = times[n];
         double deltat = tn-t0;
-        List<Double> splineTimes = new ArrayList<Double>();
+        DoubleArrayList splineTimes = new DoubleArrayList(n+1);
         for (int i=0; i<=n; ++i) {
             splineTimes.add((times[i]-t0)/deltat);
         }
@@ -162,7 +163,7 @@ public class CubicBSpline {
             if (time < _times.get(i)) {
                 // Add before point i.
                 _points.add(i, point);
-                _times.add(i, time);
+                _times.addAtIndex(i, time);
                 ++_n;
                 return;
             }
@@ -213,7 +214,7 @@ public class CubicBSpline {
         if (i < 0)
             throw new IndexOutOfBoundsException("Can't get t_i for i<0");
         if (i >= _times.size())
-            throw new IndexOutOfBoundsException("Can't get t_i for i>n (i="+i+", n="+_n+")");
+            throw new IndexOutOfBoundsException("Can't get t_i for i>n (i="+i+", n="+_n+ ')');
 
         double t0 = _times.get(0);
         double tn = _times.get(_times.size()-1);

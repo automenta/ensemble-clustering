@@ -24,18 +24,11 @@
  */
 package com.oculusinfo.ml.feature.string.centroid;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.bagofwords.distance.EditDistance;
 import com.oculusinfo.ml.feature.string.StringFeature;
+
+import java.util.*;
 
 /***
  * A Centroid for StringFeatures that represents the centroid using an approximation of the string median algorithm
@@ -62,9 +55,9 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 	private Map<String, StringFeature> points = new HashMap<String, StringFeature>();
 	
 	
-	private class DistanceScore {
-		public String feature;
-		public Double distance;
+	private static class DistanceScore {
+		public final String feature;
+		public final double distance;
 		
 		public DistanceScore(String feature, double distance) {
 			this.feature = feature;
@@ -92,9 +85,9 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 		
 		// compute the distances of all points to the reference points
 		List<DistanceScore> distances = new LinkedList<DistanceScore>();
-		for (String key : points.keySet()) {
+		for (Map.Entry<String, StringFeature> stringStringFeatureEntry : points.entrySet()) {
 			double sum = 0;
-			StringFeature f = points.get(key);
+			StringFeature f = stringStringFeatureEntry.getValue();
 			for (int i=0; i < nr; i++) {
 				sum += EditDistance.getNormLevenshteinDistance(referencePoints[i], f.getValue());
 			}
@@ -102,11 +95,7 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 		}
 		
 		// sort by distance
-		Collections.sort(distances, new Comparator<DistanceScore>() {
-			public int compare(DistanceScore o1, DistanceScore o2) {
-				return o1.distance.compareTo(o2.distance);
-			}
-		});
+		Collections.sort(distances, dsc);
 		
 		// set the test points
 		int nt = Math.min(NUM_TEST, points.size());
@@ -125,19 +114,15 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 		List<DistanceScore> distances = new LinkedList<DistanceScore>();
 		for (int i=0; i < nt; i++) {
 			double sum = 0;
-			for (String key : points.keySet()) {
-				StringFeature f = points.get(key);
+			for (Map.Entry<String, StringFeature> stringStringFeatureEntry : points.entrySet()) {
+				StringFeature f = stringStringFeatureEntry.getValue();
 				sum += EditDistance.getNormLevenshteinDistance(testPoints[i], f.getName());
 			}
 			distances.add(new DistanceScore(testPoints[i], sum));
 		}
 		
 		// sort by distance
-		Collections.sort(distances, new Comparator<DistanceScore>() {
-			public int compare(DistanceScore o1, DistanceScore o2) {
-				return o1.distance.compareTo(o2.distance);
-			}
-		});
+		Collections.sort(distances, dsc);
 		
 		// return the smallest distance point as median	
 		return distances.get(0).feature;
@@ -187,5 +172,12 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 		testPoints = new String[NUM_REFERENCE];
 		points.clear();
 	}
-	
+
+	public static final class DistanceScoreComparator implements Comparator<DistanceScore> {
+		public int compare(DistanceScore o1, DistanceScore o2) {
+            return Double.compare(o1.distance, o2.distance);
+        }
+	}
+	final static DistanceScoreComparator dsc = new DistanceScoreComparator();
+
 }

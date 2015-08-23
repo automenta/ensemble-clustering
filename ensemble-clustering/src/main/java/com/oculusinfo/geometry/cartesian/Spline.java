@@ -24,10 +24,10 @@
  */
 package com.oculusinfo.geometry.cartesian;
 
+import com.oculusinfo.math.linearalgebra.Vector;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.oculusinfo.math.linearalgebra.Vector;
 
 
 public class Spline {
@@ -92,7 +92,7 @@ public class Spline {
         if (i < 0)
             throw new IndexOutOfBoundsException("Can't get t_i for i<0");
         if (i >= _times.size())
-            throw new IndexOutOfBoundsException("Can't get t_i for i>n (i="+i+", n="+_n+")");
+            throw new IndexOutOfBoundsException("Can't get t_i for i>n (i="+i+", n="+_n+ ')');
 
         double t0 = _times.get(0);
         double tn = _times.get(_times.size()-1);

@@ -58,6 +58,6 @@ public class FeatureFrequency implements Serializable {
 	
 	@Override
 	public String toString() {
-		return feature + " (" + frequency + ")";
+		return feature + " (" + frequency + ')';
 	}
 }

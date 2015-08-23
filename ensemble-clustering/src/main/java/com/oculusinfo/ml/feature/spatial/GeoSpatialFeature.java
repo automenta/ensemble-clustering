@@ -39,7 +39,7 @@ public class GeoSpatialFeature extends Feature {
 	
 	@Override
 	public String toString() {
-		return (this.getName() + ":[" + latitude + ";" + longitude + "]");
+		return (this.getName() + ":[" + latitude + ';' + longitude + ']');
 	}
 	
 	public GeoSpatialFeature() {

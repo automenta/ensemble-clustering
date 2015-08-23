@@ -204,7 +204,6 @@ public class Vector implements Serializable {
     @Override
     public boolean equals (Object obj) {
         if (this == obj) return true;
-        if (null == this) return false;
         if (!(obj instanceof Vector)) return false;
         Vector v = (Vector) obj;
 
@@ -225,13 +224,13 @@ public class Vector implements Serializable {
     @Override
     public String toString () {
         StringBuffer res = new StringBuffer();
-        res.append("[");
+        res.append('[');
         for (int i=0; i<_data.length; ++i) {
             if (i>0)
                 res.append(", ");
             res.append(String.format("%.4f", _data[i]));
         }
-        res.append("]");
+        res.append(']');
         return res.toString();
     }
 }
