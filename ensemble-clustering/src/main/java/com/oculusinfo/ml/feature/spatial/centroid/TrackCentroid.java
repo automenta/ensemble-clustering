@@ -24,12 +24,12 @@
  */
 package com.oculusinfo.ml.feature.spatial.centroid;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import com.oculusinfo.geometry.geodesic.Track;
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.spatial.TrackFeature;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A Centroid for TrackFeatures that represents the centroid by computing the average track

@@ -24,15 +24,15 @@
  */
 package com.oculusinfo.ml.feature.semantic.centroid;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.semantic.SemanticFeature;
 import com.oculusinfo.ml.feature.string.StringFeature;
 import com.oculusinfo.ml.stats.FeatureFrequency;
 import com.oculusinfo.ml.stats.FeatureFrequencyTable;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /***
  * A Centroid for SemanticFeatures that represents the centroid as the top 10 semantic features with the highest frequency

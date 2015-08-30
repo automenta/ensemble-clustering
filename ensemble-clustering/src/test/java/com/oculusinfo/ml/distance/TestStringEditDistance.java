@@ -24,17 +24,15 @@
  */
 package com.oculusinfo.ml.distance;
 
-import java.util.Collections;
-
+import com.oculusinfo.ml.feature.string.StringFeature;
+import com.oculusinfo.ml.feature.string.distance.EditDistance;
 import junit.framework.Assert;
-
 import org.junit.Test;
 
-import com.oculusinfo.ml.feature.string.distance.EditDistance;
-import com.oculusinfo.ml.feature.string.StringFeature;
+import java.util.Collections;
 
 public class TestStringEditDistance {
-	double epsilon = 0.00001;
+	final double epsilon = 0.00001;
 	
 	private boolean isEqual(double d1, double d2) {
 		return (Math.abs( d1 - d2 ) < epsilon );

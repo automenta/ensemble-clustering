@@ -24,14 +24,14 @@
  */
 package com.oculusinfo.ml;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.oculusinfo.ml.feature.Feature;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-import com.oculusinfo.ml.feature.Feature;
 
 /***
  * Instance represents one "row" or "group" of data describing one entity in a data set.
@@ -48,7 +48,7 @@ public class Instance implements Serializable {
 	
 	protected String 	id;
 	protected String	classLabel;
-	protected Map<String, Feature> features = new LinkedHashMap<String, Feature>();
+	protected final Map<String, Feature> features = new LinkedHashMap<String, Feature>();
 	
 	public Instance() { 
 		this(UUID.randomUUID().toString());

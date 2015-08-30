@@ -24,23 +24,16 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster;
 
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.oculusinfo.ml.DataSet;
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.feature.Feature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.*;
 
 /***
  * 
@@ -59,7 +52,7 @@ public abstract class AbstractClusterer extends BaseClusterer {
 	protected final boolean penalizeMissingFeatures;
 	protected final boolean firstCandidate;
 	
-	protected double maxDistance = 1.0;
+	//protected double maxDistance = 1.0;
 	
 	protected static final Logger log = LoggerFactory.getLogger("com.oculusinfo");
 	protected ExecutorService exec; // = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL); //.newSingleThreadExecutor();;
@@ -69,6 +62,7 @@ public abstract class AbstractClusterer extends BaseClusterer {
 		exec = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL, new MyThreadFactory()); //.newSingleThreadExecutor();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(){
+			@Override
 			public void run(){
 				terminate();
 			}
@@ -173,7 +167,7 @@ public abstract class AbstractClusterer extends BaseClusterer {
 		int sIdx = 0;
 		int eIdx = 0;
 		while (eIdx < clusters.size()) {
-			eIdx = (int)Math.min(sIdx+blocksize, clusters.size());
+			eIdx = Math.min(sIdx+blocksize, clusters.size());
 			blocks.add(new LinkedList<Instance>(clusters.subList(sIdx, eIdx)));
 			sIdx = eIdx;
 		}
@@ -197,22 +191,19 @@ public abstract class AbstractClusterer extends BaseClusterer {
 		
 	
 		for (final List<? extends Instance> clusters : clusterBlocks) {
-			batch.submit(new Callable<DistanceResult>() {
-				@Override
-				public DistanceResult call() {
-					double bestDist = Double.MAX_VALUE;
-					Instance bestMatch = null;
-					
-					for (Instance c : clusters) {
-						double d = distance(inst, c); 
-						if (d < bestDist) {
-							bestDist = d;
-							bestMatch = c;
-						}
-					}
-					return new DistanceResult(inst, (Cluster)bestMatch, bestDist);
-				}
-			});
+			batch.submit(() -> {
+                double bestDist = Double.MAX_VALUE;
+                Instance bestMatch = null;
+
+                for (Instance c : clusters) {
+                    double d = distance(inst, c);
+                    if (d < bestDist) {
+                        bestDist = d;
+                        bestMatch = c;
+                    }
+                }
+                return new DistanceResult(inst, (Cluster)bestMatch, bestDist);
+            });
 		}
 		for (int i=0; i < clusterBlocks.size(); i++) {
 			try {

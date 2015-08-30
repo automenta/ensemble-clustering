@@ -24,8 +24,6 @@
  */
 package com.oculusinfo.ml.unsupervised;
 
-import java.util.Random;
-
 import com.oculusinfo.ml.DataSet;
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.feature.spatial.GeoSpatialFeature;
@@ -34,10 +32,11 @@ import com.oculusinfo.ml.feature.spatial.distance.HaversineDistance;
 import com.oculusinfo.ml.feature.string.StringFeature;
 import com.oculusinfo.ml.feature.string.centroid.StringMedianCentroid;
 import com.oculusinfo.ml.feature.string.distance.EditDistance;
-
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
 import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
 import com.oculusinfo.ml.unsupervised.cluster.kmeans.KMeans;
+
+import java.util.Random;
 
 public class TestNameLocationClustering {
 	

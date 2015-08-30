@@ -24,12 +24,12 @@
  */
 package com.oculusinfo.ml.feature.temporal.centroid;
 
+import com.oculusinfo.ml.centroid.Centroid;
+import com.oculusinfo.ml.feature.temporal.TemporalFeature;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-
-import com.oculusinfo.ml.centroid.Centroid;
-import com.oculusinfo.ml.feature.temporal.TemporalFeature;
 
 /***
  * A Centroid for TemporalFeatures that represents the centroid by the min start and max end date

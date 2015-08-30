@@ -25,5 +25,5 @@
 package com.oculusinfo.ml.search;
 
 public interface ObjectiveFunction {
-	public double score(Solution solution);
+	double score(Solution solution);
 }

@@ -24,10 +24,10 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.Feature;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.util.*;
 
@@ -46,8 +46,8 @@ public class Cluster extends Instance {
 	
 	protected boolean onlineUpdate = false;  	// default to not updating centroid when new members are added
 	@SuppressWarnings("rawtypes")
-	protected Map<String, Centroid> centroids = new HashMap<String, Centroid>();
-	protected Set<Instance> members = new LinkedHashSet<Instance>(); 
+	protected final Map<String, Centroid> centroids = new HashMap<String, Centroid>();
+	protected final Set<Instance> members = new LinkedHashSet<Instance>();
 
 	public Cluster() {
 		super();
@@ -56,7 +56,8 @@ public class Cluster extends Instance {
 	@SuppressWarnings("rawtypes")
 	public Cluster(String id, Collection<FeatureTypeDefinition> types, boolean onlineUpdate) {
 		super(id);
-		
+
+		//TODO determine size of the collections from 'types'.size()
 		for (FeatureTypeDefinition def : types) {
 			try {
 				Centroid centroid = def.centroidClass.newInstance();
@@ -136,6 +137,7 @@ public class Cluster extends Instance {
 		return members.contains(inst);
 	}
 
+	@Override
 	@JsonIgnore
 	public boolean isEmpty() {
 		return members.isEmpty();

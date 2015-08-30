@@ -24,12 +24,12 @@
  */
 package com.oculusinfo.ml.feature.temporal.centroid;
 
+import com.oculusinfo.ml.centroid.Centroid;
+import com.oculusinfo.ml.feature.temporal.TemporalFeature;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-
-import com.oculusinfo.ml.centroid.Centroid;
-import com.oculusinfo.ml.feature.temporal.TemporalFeature;
 
 /***
  * A Centroid for TemporalFeatures that represents the centroid by the average start and end date 
@@ -88,8 +88,8 @@ public class TemporalCentroid implements Centroid<TemporalFeature> {
 	public TemporalFeature getCentroid() {
 		// create the centroid temporal feature set
 		TemporalFeature centroid = new TemporalFeature(name);
-		centroid.setValue(new Date((long) Math.round(cstart/weight)),
-		           new Date((long) Math.round(cend/weight))); // compute average start/end
+		centroid.setValue(new Date(Math.round(cstart/weight)),
+		           new Date(Math.round(cend/weight))); // compute average start/end
 		centroid.setWeight(weight);
 		
 		return centroid;

@@ -24,9 +24,9 @@
  */
 package com.oculusinfo.ml.stats;
 
-import java.io.Serializable;
-
 import com.oculusinfo.ml.feature.Feature;
+
+import java.io.Serializable;
 
 public class FeatureFrequency implements Serializable {
 	private static final long serialVersionUID = -3008472634828604901L;

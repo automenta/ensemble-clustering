@@ -73,7 +73,7 @@ public class TrackClusterWrapper {
     private String                   _clusterName;
 
     // Statistics kept on member tracks
-    private Map<String, StatTracker> _statistics;
+    private final Map<String, StatTracker> _statistics;
 
     public TrackClusterWrapper (Cluster cluster) {
         this(Collections.singleton(cluster));
@@ -121,12 +121,7 @@ public class TrackClusterWrapper {
             _distancesFromTrueMean.put(track, track.getDistance(_trueMean));
         }
 
-        Collections.sort(_tracks, new Comparator<Track>() {
-            @Override
-            public int compare (Track t1, Track t2) {
-                return _distancesFromTrueMean.get(t1).compareTo(_distancesFromTrueMean.get(t2));
-            }
-        });
+        Collections.sort(_tracks, (t1, t2) -> _distancesFromTrueMean.get(t1).compareTo(_distancesFromTrueMean.get(t2)));
     }
 
 

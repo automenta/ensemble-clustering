@@ -24,23 +24,6 @@
  */
 package com.oculusinfo.ml.tracks;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.logging.Logger;
-
-import junit.framework.Assert;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.oculusinfo.geometry.cartesian.CubicBSpline;
 import com.oculusinfo.geometry.geodesic.Position;
 import com.oculusinfo.geometry.geodesic.PositionCalculationParameters;
@@ -58,6 +41,16 @@ import com.oculusinfo.ml.unsupervised.cluster.Cluster;
 import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
 import com.oculusinfo.ml.unsupervised.cluster.kmeans.KMeans;
 import com.oculusinfo.ml.validation.unsupervised.external.BCubed;
+import junit.framework.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Logger;
 
 public class TrackClusteringTests {
     private static final Logger LOGGER = Logger.getLogger(TrackClusteringTests.class.getName());
@@ -294,8 +287,8 @@ public class TrackClusteringTests {
 
 
 
-        private List<CubicBSpline> _splines;
-        private List<Cluster>      _clusters;
+        private final List<CubicBSpline> _splines;
+        private final List<Cluster>      _clusters;
         private Rectangle2D        _drawingBounds;
 
         public TrackFrame () {

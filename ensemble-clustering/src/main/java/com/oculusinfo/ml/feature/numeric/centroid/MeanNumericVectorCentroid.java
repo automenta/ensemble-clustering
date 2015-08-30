@@ -24,11 +24,11 @@
  */
 package com.oculusinfo.ml.feature.numeric.centroid;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /***
  * A Centroid for NumericVectorFeatures that represents the centroid as the average number of each vector component

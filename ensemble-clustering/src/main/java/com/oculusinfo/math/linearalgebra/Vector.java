@@ -43,7 +43,7 @@ public class Vector implements Serializable {
 
 
     private double   _epsilon;
-    private double[] _data;
+    private final double[] _data;
 
     public Vector (double... data) {
         _data = data;

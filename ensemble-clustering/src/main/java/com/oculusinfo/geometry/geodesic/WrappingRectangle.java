@@ -33,11 +33,11 @@ import com.oculusinfo.math.algebra.AngleUtilities;
  */
 public class WrappingRectangle {
     private double _epsilon; // double equality factor
-    private double _centerLon;
-    private double _minLon;
-    private double _minLat;
-    private double _maxLon;
-    private double _maxLat;
+    private final double _centerLon;
+    private final double _minLon;
+    private final double _minLat;
+    private final double _maxLon;
+    private final double _maxLat;
 
     private WrappingRectangle (double centerLon, double minLon, double maxLon,
                                double minLat, double maxLat) {
@@ -80,10 +80,8 @@ public class WrappingRectangle {
 
         double lon = AngleUtilities.intoRangeDegrees(_centerLon,
                                                      p.getLongitude());
-        if (lon > _maxLon || lon < _minLon)
-            return false;
+        return !(lon > _maxLon || lon < _minLon);
 
-        return true;
     }
 
     /**
@@ -136,8 +134,7 @@ public class WrappingRectangle {
 	double oMinLon = AngleUtilities.intoRangeDegrees(_minLon, rect._minLon);
 	if (Math.abs(oMinLon-_minLon) > _epsilon) return false;
 	double oMaxLon = AngleUtilities.intoRangeDegrees(_maxLon, rect._maxLon);
-	if (Math.abs(oMaxLon-_maxLon) > _epsilon) return false;
-	return true;
+        return Math.abs(oMaxLon - _maxLon) <= _epsilon;
     }
 
     @Override

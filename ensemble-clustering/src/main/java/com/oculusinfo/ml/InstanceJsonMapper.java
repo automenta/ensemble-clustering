@@ -24,15 +24,14 @@
  */
 package com.oculusinfo.ml;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+
 
 /***
  * Serializer for Instance object to/from JSON
@@ -42,11 +41,11 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class InstanceJsonMapper {
 
-    private static ObjectMapper mapper = new ObjectMapper();
-    private static JsonFactory factory = new JsonFactory();
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final JsonFactory factory = new JsonFactory();
 
     public static Instance fromJson(String jsonAsString)
-    	throws JsonMappingException, JsonParseException, IOException {
+    	throws IOException {
     
     	mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
     	Instance inst = mapper.readValue(jsonAsString, Instance.class);
@@ -55,10 +54,10 @@ public class InstanceJsonMapper {
     }
 
     public static String toJson(Instance inst, boolean prettyPrint) 
-    	throws JsonMappingException, JsonGenerationException, IOException {
+    	throws IOException {
         
     	StringWriter writer = new StringWriter();
-        JsonGenerator generator = factory.createJsonGenerator(writer);
+        JsonGenerator generator = factory.createGenerator(writer);
         
         if (prettyPrint) {
             generator.useDefaultPrettyPrinter();

@@ -24,12 +24,13 @@
  */
 package com.oculusinfo.ml.feature.bagofwords.centroid;
 
-import java.util.Collection;
-import java.util.Collections;
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.bagofwords.BagOfWordsFeature;
 import com.oculusinfo.ml.stats.FeatureFrequency;
 import com.oculusinfo.ml.stats.FeatureFrequencyTable;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /***
  * A Centroid for BagOfWordsFeatures that represents the centroid as the top 10 words with the highest frequency

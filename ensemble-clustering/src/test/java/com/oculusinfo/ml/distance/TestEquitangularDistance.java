@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TestEquitangularDistance {
 	
-	double epsilon = 0.00001;
+	final double epsilon = 0.00001;
 	
 	private boolean isEqual(double d1, double d2) {
 		return (Math.abs( d1 - d2 ) < epsilon );

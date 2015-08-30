@@ -30,10 +30,10 @@ package com.oculusinfo.geometry.geodesic;
 
 
 public class PositionCalculationParameters {
-    private PositionCalculationType _type;
-    private double                  _allowedError;
-    private double                  _epsilon;
-    private boolean                 _ignoreDirection;
+    private final PositionCalculationType _type;
+    private final double                  _allowedError;
+    private final double                  _epsilon;
+    private final boolean                 _ignoreDirection;
 
     /**
      * Create a set of parameters that determine how geodetic calculations are

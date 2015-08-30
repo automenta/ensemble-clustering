@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class DPMeans extends KMeans {
 	protected double threshold = 0.5; // default threshold
-	protected double convergeTest = 0.001; // default test of convergence
+	protected final double convergeTest = 0.001; // default test of convergence
 	
 	public DPMeans(int maxIterations, boolean penalizeMissingFeatures) {
 		super(1, maxIterations, penalizeMissingFeatures);

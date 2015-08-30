@@ -34,12 +34,12 @@ import static org.junit.Assert.assertTrue;
 
 public class TestTemporalDistance {
 
-	long MS_PER_DAY = 86400000;
-	long MS_PER_WEEK = MS_PER_DAY * 7;
-	long MS_PER_MONTH = MS_PER_DAY * 30;
-	long MS_PER_YEAR = MS_PER_DAY * 365;
+	final long MS_PER_DAY = 86400000;
+	final long MS_PER_WEEK = MS_PER_DAY * 7;
+	final long MS_PER_MONTH = MS_PER_DAY * 30;
+	final long MS_PER_YEAR = MS_PER_DAY * 365;
 	
-	double epsilon = 0.00001;
+	final double epsilon = 0.00001;
 	
 	private boolean isEqual(double d1, double d2) {
 		return (Math.abs( d1 - d2 ) < epsilon );

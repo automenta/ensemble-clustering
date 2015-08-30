@@ -35,7 +35,7 @@ import java.io.Serializable;
  */
 public interface ClusterResult extends Iterable<Cluster>, Serializable {
 
-	public boolean isEmpty();
+	boolean isEmpty();
 	
-	public int size();
+	int size();
 }

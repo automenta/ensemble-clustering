@@ -27,10 +27,13 @@ package com.oculusinfo.geometry.geodesic;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.oculusinfo.math.linearalgebra.ListUtilities;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 abstract public class Track {
-    private PositionCalculationParameters _parameters;
+    private final PositionCalculationParameters _parameters;
     private List<Position>                _points;
     private List<Double>                  _parameterization;
     private double                        _length;

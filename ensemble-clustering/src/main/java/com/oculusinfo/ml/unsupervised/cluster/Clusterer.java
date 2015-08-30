@@ -24,10 +24,10 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster;
 
-import java.util.List;
-
 import com.oculusinfo.ml.DataSet;
 import com.oculusinfo.ml.Instance;
+
+import java.util.List;
 
 public interface Clusterer {
 	
@@ -35,13 +35,13 @@ public interface Clusterer {
 	 * Method to initialize the clusterer - useful for clusterers that need to allocated resources such as thread pools
 	 * 
 	 */
-	public void init();
+	void init();
 	
 	/***
 	 * Method to terminate the clusterer - useful for clusterers that need to cleanup resources such as thread pools
 	 * 
 	 */
-	public void terminate();
+	void terminate();
 	
 	/***
 	 * Cluster the instances in ds using the clusters provided
@@ -50,7 +50,7 @@ public interface Clusterer {
 	 * @param clusters is the list of clusters to use during clustering 
 	 * @return the list of clusters that were modified
 	 */
-	public ClusterResult doIncrementalCluster(DataSet ds, List<Cluster> clusters);
+	ClusterResult doIncrementalCluster(DataSet ds, List<Cluster> clusters);
 	
 	/***
 	 * Generate clusters given the provided DataSet ds
@@ -58,7 +58,7 @@ public interface Clusterer {
 	 * @param ds is the DataSet containing the instances to cluster
 	 * @return the list of clusters created
 	 */
-	public ClusterResult doCluster(DataSet ds);
+	ClusterResult doCluster(DataSet ds);
 	
 	/***
 	 * Calculate the distance of the two instances using the distance measures 
@@ -68,5 +68,5 @@ public interface Clusterer {
 	 * @param inst2
 	 * @return a double value representing the distance between inst1 and inst2
 	 */
-	public double distance(Instance inst1, Instance inst2);
+	double distance(Instance inst1, Instance inst2);
 }

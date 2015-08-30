@@ -37,7 +37,7 @@ import java.util.List;
 public class InMemoryClusterResult implements ClusterResult {
 	private static final long serialVersionUID = -485649795889971226L;
 	
-	List<Cluster> clusters = new LinkedList<Cluster>();
+	final List<Cluster> clusters = new LinkedList<Cluster>();
 	
 	public InMemoryClusterResult(List<Cluster> clusters) {
 		this.clusters.addAll(clusters);

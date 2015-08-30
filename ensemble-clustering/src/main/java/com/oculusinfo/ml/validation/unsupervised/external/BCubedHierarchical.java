@@ -24,12 +24,12 @@
  */
 package com.oculusinfo.ml.validation.unsupervised.external;
 
-import java.util.Collection;
-import java.util.LinkedList;
-
 import com.oculusinfo.ml.DataSet;
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
+
+import java.util.Collection;
+import java.util.LinkedList;
 
 /***
  * An external hierarchical clustering validation implementation of BCubed

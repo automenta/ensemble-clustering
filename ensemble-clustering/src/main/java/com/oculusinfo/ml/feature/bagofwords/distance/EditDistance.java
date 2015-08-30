@@ -24,11 +24,11 @@
  */
 package com.oculusinfo.ml.feature.bagofwords.distance;
 
-import java.util.Collection;
-
 import com.oculusinfo.ml.distance.DistanceFunction;
 import com.oculusinfo.ml.feature.bagofwords.BagOfWordsFeature;
 import com.oculusinfo.ml.stats.FeatureFrequency;
+
+import java.util.Collection;
 
 /**
  * A distance function that computes the normalized Levenshtein (edit) distance between two BagOfWordFeatures.

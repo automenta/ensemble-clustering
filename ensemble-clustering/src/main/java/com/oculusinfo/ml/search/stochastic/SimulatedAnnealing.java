@@ -24,11 +24,11 @@
  */
 package com.oculusinfo.ml.search.stochastic;
 
-import java.util.Random;
-
 import com.oculusinfo.ml.search.ObjectiveFunction;
 import com.oculusinfo.ml.search.SearchException;
 import com.oculusinfo.ml.search.Solution;
+
+import java.util.Random;
 
 /***
  * Simulated Annealing for stochastically searching for optimum solution given an objective function.
@@ -65,7 +65,7 @@ public class SimulatedAnnealing {
 	protected ObjectiveFunction objfunc;
 	
 	// Random number generated for accepting new solutions
-	protected Random rnd = new Random();
+	protected final Random rnd = new Random();
 	
 	public SimulatedAnnealing(ObjectiveFunction func) {
 		setObjectiveFunction(func);

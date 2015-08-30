@@ -24,11 +24,11 @@
  */
 package com.oculusinfo.ml.feature.spatial.centroid;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.spatial.GeoSpatialFeature;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /***
  * A Centroid for GeoSpatialFeatures that represents the centroid using a naive average of latitude and longitude

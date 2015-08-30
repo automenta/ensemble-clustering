@@ -24,9 +24,9 @@
  */
 package com.oculusinfo.ml.search;
 
-import java.util.Random;
-
 import com.oculusinfo.ml.search.stochastic.SimulatedAnnealing;
+
+import java.util.Random;
 
 public class TestAnnealer {
 
@@ -65,23 +65,15 @@ public class TestAnnealer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SimulatedAnnealing annealer = new SimulatedAnnealing(new ObjectiveFunction() {
-
-//			static final double A=2;
-//			static final double B=3;
-			
-			@Override
-			public double score(Solution solution) {
-				double error;
-				TestSolution s = (TestSolution)solution;
-				error = Math.pow(s.vertex[0], 2) + Math.pow(s.vertex[1], 2);
+		SimulatedAnnealing annealer = new SimulatedAnnealing(solution -> {
+            double error;
+            TestSolution s = (TestSolution)solution;
+            error = Math.pow(s.vertex[0], 2) + Math.pow(s.vertex[1], 2);
 //				error=Math.pow(A-Math.sin(s.vertex[0])*Math.exp(s.vertex[1])*s.vertex[2], 2);
 //				error+=Math.pow(B-Math.exp(s.vertex[0])*Math.sin(s.vertex[1]), 2);
-				System.out.println(error);
-				return error;
-			}
-			
-		});
+            System.out.println(error);
+            return error;
+        });
 		
 		try {
 			Random rnd = new Random();

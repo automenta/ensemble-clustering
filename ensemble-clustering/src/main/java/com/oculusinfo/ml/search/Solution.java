@@ -26,5 +26,5 @@ package com.oculusinfo.ml.search;
 
 public interface Solution {
 
-	public Solution neighbor(double temp); 
+	Solution neighbor(double temp);
 }

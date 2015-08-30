@@ -40,7 +40,7 @@ import java.util.List;
  */
 public abstract class DistanceFunction<T> implements Serializable {
 	private static final long serialVersionUID = -3942771973916051670L;
-	protected double weight;
+	protected final double weight;
 	
 	public DistanceFunction() {
 		this(1);

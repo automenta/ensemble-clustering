@@ -29,7 +29,6 @@ import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.feature.string.StringFeature;
 import com.oculusinfo.ml.feature.string.centroid.StringMedianCentroid;
 import com.oculusinfo.ml.feature.string.distance.EditDistance;
-
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
 import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
 import com.oculusinfo.ml.unsupervised.cluster.kmeans.KMeans;

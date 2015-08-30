@@ -24,15 +24,13 @@
  */
 package com.oculusinfo.ml.tracks;
 
-import java.awt.Dimension;
-import java.awt.Point;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.prefs.Preferences;
-
-import javax.swing.JFrame;
 
 
 
@@ -44,7 +42,7 @@ import javax.swing.JFrame;
  */
 public class TestFrame extends JFrame {
     private static final long serialVersionUID = 1L;
-    private Object _showLock;
+    private final Object _showLock;
     public TestFrame () {
         _showLock = new Object();
         initializeGeometry();

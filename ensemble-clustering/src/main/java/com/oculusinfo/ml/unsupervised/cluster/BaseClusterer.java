@@ -24,12 +24,13 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.distance.DistanceFunction;
 import com.oculusinfo.ml.feature.Feature;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class BaseClusterer implements Clusterer {
 

@@ -24,10 +24,6 @@
  */
 package com.oculusinfo.ml.tracks;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
-
 import com.oculusinfo.geometry.geodesic.Position;
 import com.oculusinfo.geometry.geodesic.PositionCalculationParameters;
 import com.oculusinfo.geometry.geodesic.PositionCalculationType;
@@ -35,6 +31,8 @@ import com.oculusinfo.geometry.geodesic.Track;
 import com.oculusinfo.geometry.geodesic.tracks.Cartesian3DTrack;
 import com.oculusinfo.ml.feature.spatial.TrackFeature;
 import com.oculusinfo.ml.feature.spatial.centroid.TrackCentroid;
+import junit.framework.Assert;
+import org.junit.Test;
 
 public class TrackCentroidTests {
     private static final double EPSILON = 1E-12;

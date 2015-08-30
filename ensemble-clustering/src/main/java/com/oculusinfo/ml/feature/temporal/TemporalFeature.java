@@ -24,9 +24,9 @@
  */
 package com.oculusinfo.ml.feature.temporal;
 
-import java.util.Date;
-
 import com.oculusinfo.ml.feature.Feature;
+
+import java.util.Date;
 
 /***
  * A TemporalFeature represents a time period with as start and end date

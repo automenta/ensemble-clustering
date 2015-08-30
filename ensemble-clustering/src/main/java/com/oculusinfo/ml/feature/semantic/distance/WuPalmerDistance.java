@@ -42,7 +42,7 @@ import com.oculusinfo.ml.feature.semantic.SemanticFeature;
  */
 public class WuPalmerDistance extends DistanceFunction<SemanticFeature> {
 	private static final long serialVersionUID = 2357149443801960761L;
-	private Concept taxonomy;
+	private final Concept taxonomy;
 	
 	public WuPalmerDistance(Concept taxonomy) {
 		this(taxonomy, 1);

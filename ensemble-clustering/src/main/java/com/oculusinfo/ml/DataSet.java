@@ -42,8 +42,6 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	
 	private final Map<String, Instance> map = new LinkedHashMap<String, Instance>();
 
-	;
-	
 	public Set<String> getKeys() {
 		return map.keySet();
 	}

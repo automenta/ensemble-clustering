@@ -24,18 +24,17 @@
  */
 package com.oculusinfo.ml.distance;
 
-import static org.junit.Assert.assertTrue;
+import com.oculusinfo.ml.feature.spatial.GeoSpatialFeature;
+import com.oculusinfo.ml.feature.spatial.distance.EuclideanDistance;
+import org.junit.Test;
 
 import java.util.Collections;
 
-import org.junit.Test;
-
-import com.oculusinfo.ml.feature.spatial.GeoSpatialFeature;
-import com.oculusinfo.ml.feature.spatial.distance.EuclideanDistance;
+import static org.junit.Assert.assertTrue;
 
 public class TestEuclideanDistance {
 		
-	double epsilon = 0.00001;
+	final double epsilon = 0.00001;
 	
 	private boolean isEqual(double d1, double d2) {
 		return (Math.abs( d1 - d2 ) < epsilon );

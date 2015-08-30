@@ -24,20 +24,6 @@
  */
 package com.oculusinfo.ml.tracks;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.oculusinfo.geometry.cartesian.CubicBSpline;
 import com.oculusinfo.geometry.geodesic.Position;
 import com.oculusinfo.geometry.geodesic.PositionCalculationParameters;
@@ -54,11 +40,19 @@ import com.oculusinfo.ml.unsupervised.cluster.Cluster;
 import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
 import com.oculusinfo.ml.unsupervised.cluster.kmeans.KMeans;
 import com.oculusinfo.ml.validation.unsupervised.external.BCubed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class TestTrackCluster {
-	protected static Logger log = LoggerFactory.getLogger("TestTrackCluster.class");
+	protected static final Logger log = LoggerFactory.getLogger("TestTrackCluster.class");
 
-    private static PositionCalculationParameters GEODETIC_PARAMETERS =
+    private static final PositionCalculationParameters GEODETIC_PARAMETERS =
             new PositionCalculationParameters(PositionCalculationType.Geodetic,
                                               0.0001, 1E-8, false);
 
@@ -175,8 +169,8 @@ public class TestTrackCluster {
 
 
 
-        private List<CubicBSpline> _splines;
-        private List<Cluster>    _clusters;
+        private final List<CubicBSpline> _splines;
+        private final List<Cluster>    _clusters;
         private Rectangle2D        _drawingBounds;
 
         public TrackFrame () {

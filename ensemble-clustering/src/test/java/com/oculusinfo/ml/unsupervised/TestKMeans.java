@@ -24,16 +24,6 @@
  */
 package com.oculusinfo.ml.unsupervised;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.Ellipse2D;
-import java.util.Random;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-
 import com.oculusinfo.ml.DataSet;
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
@@ -42,6 +32,11 @@ import com.oculusinfo.ml.feature.numeric.distance.EuclideanDistance;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
 import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
 import com.oculusinfo.ml.unsupervised.cluster.kmeans.KMeans;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.util.Random;
 
 public class TestKMeans extends JFrame {
 
@@ -87,6 +82,7 @@ public class TestKMeans extends JFrame {
         t.add(new JComponent() {
 			private static final long serialVersionUID = -2708612400626081243L;
 
+			@Override
 			public void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

@@ -24,10 +24,10 @@
  */
 package com.oculusinfo.ml.validation.unsupervised.external;
 
-import java.util.Collection;
-
 import com.oculusinfo.ml.Instance;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
+
+import java.util.Collection;
 
 /***
  * External clustering validation implementation of BCubed

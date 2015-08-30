@@ -24,10 +24,10 @@
  */
 package com.oculusinfo.ml.feature.temporal.distance;
 
-import java.util.Date;
-
 import com.oculusinfo.ml.distance.DistanceFunction;
 import com.oculusinfo.ml.feature.temporal.TemporalFeature;
+
+import java.util.Date;
 
 /***
  * A distance function that computes the distance between two TemporalFeatures

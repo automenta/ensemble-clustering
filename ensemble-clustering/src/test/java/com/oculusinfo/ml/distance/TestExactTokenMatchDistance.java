@@ -24,17 +24,15 @@
  */
 package com.oculusinfo.ml.distance;
 
-import java.util.Collections;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
-
 import com.oculusinfo.ml.feature.bagofwords.BagOfWordsFeature;
 import com.oculusinfo.ml.feature.bagofwords.distance.ExactTokenMatchDistance;
+import junit.framework.Assert;
+import org.junit.Test;
+
+import java.util.Collections;
 
 public class TestExactTokenMatchDistance {
-double epsilon = 0.00001;
+final double epsilon = 0.00001;
 	
 	private boolean isEqual(double d1, double d2) {
 		return (Math.abs( d1 - d2 ) < epsilon );

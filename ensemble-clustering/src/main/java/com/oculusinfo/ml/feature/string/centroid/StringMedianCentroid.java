@@ -52,7 +52,7 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 	private String[] referencePoints = new String[NUM_REFERENCE];
 	private String[] testPoints = new String[NUM_REFERENCE];
 	
-	private Map<String, StringFeature> points = new HashMap<String, StringFeature>();
+	private final Map<String, StringFeature> points = new HashMap<String, StringFeature>();
 	
 	
 	private static class DistanceScore {
@@ -174,6 +174,7 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 	}
 
 	public static final class DistanceScoreComparator implements Comparator<DistanceScore> {
+		@Override
 		public int compare(DistanceScore o1, DistanceScore o2) {
             return Double.compare(o1.distance, o2.distance);
         }

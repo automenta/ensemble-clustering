@@ -24,18 +24,18 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster;
 
-import java.io.Serializable;
-
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.distance.DistanceFunction;
 
+import java.io.Serializable;
+
 public class FeatureTypeDefinition implements Serializable {
 	private static final long serialVersionUID = -8378567604749382148L;
-	public String featureName;
+	public final String featureName;
 	@SuppressWarnings("rawtypes")
-	public DistanceFunction distFunc;
+	public final DistanceFunction distFunc;
 	@SuppressWarnings("rawtypes")
-	public Class<? extends Centroid> centroidClass;
+	public final Class<? extends Centroid> centroidClass;
 	
 	@SuppressWarnings("rawtypes")
 	public FeatureTypeDefinition(String featureName, 

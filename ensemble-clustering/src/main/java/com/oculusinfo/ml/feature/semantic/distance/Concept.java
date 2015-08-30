@@ -46,7 +46,7 @@ public class Concept implements Serializable {
 	private static final long serialVersionUID = 1273216830907344599L;
 	private int depth = -1;
 	private int height = -1;
-	private String name;
+	private final String name;
 	private Concept parent = null;
 	private final Set<Concept> children = new HashSet<Concept>();
 	private final HashMap<String, Concept> lookupcache = new HashMap<String, Concept>();

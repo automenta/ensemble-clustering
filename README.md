@@ -1,3 +1,8 @@
+# WARNING This fork contains unauthorized modifications and may invalidate SECURITY CLEARANCES.
+
+----
+
+
 # Ensemble Clustering Library
 
 Ensemble Clustering is a flexible multi-threaded data clustering software library for rapidly constructing tailored clustering solutions that leverage the different semantic aspects of heterogeneous data. Data clustering groups data together based on their similarity and has many applications such as organizing data to aid analysts or facilitating searching for similar data entities.  For example, twitter users could be clustered into groups based on the similarity of their names or locations.  

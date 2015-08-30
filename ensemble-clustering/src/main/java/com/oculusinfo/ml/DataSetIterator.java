@@ -3,10 +3,8 @@ package com.oculusinfo.ml;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Created by me on 8/23/15.
- */
-public class DataSetIterator implements Iterator<Instance> {
+
+final public class DataSetIterator implements Iterator<Instance> {
     final Iterator<Map.Entry<String, Instance>> iterator;
 
 	public DataSetIterator(Map<String, Instance> map) {
@@ -14,17 +12,17 @@ public class DataSetIterator implements Iterator<Instance> {
     }
 
 	@Override
-    public boolean hasNext() {
+    public final boolean hasNext() {
         return iterator.hasNext();
     }
 
 	@Override
-    public Instance next() {
+    public final Instance next() {
         return iterator.next().getValue();
     }
 
 	@Override
-    public void remove() {
+    public final void remove() {
         iterator.remove();
     }
 }

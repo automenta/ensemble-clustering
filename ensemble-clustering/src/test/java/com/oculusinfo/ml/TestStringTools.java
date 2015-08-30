@@ -24,10 +24,9 @@
  */
 package com.oculusinfo.ml;
 
+import com.oculusinfo.ml.utils.StringTools;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.oculusinfo.ml.utils.StringTools;
 
 public class TestStringTools {
 

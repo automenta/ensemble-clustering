@@ -31,10 +31,10 @@ import java.util.List;
 
 
 public class Spline {
-    private boolean      _periodic;
+    private final boolean      _periodic;
     private int          _n;
-    private List<Vector> _points;
-    private List<Double> _times;
+    private final List<Vector> _points;
+    private final List<Double> _times;
 
     public Spline (boolean periodic) {
         _periodic = periodic;

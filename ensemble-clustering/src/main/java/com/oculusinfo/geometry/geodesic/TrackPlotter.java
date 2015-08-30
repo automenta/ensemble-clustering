@@ -24,10 +24,7 @@
  */
 package com.oculusinfo.geometry.geodesic;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -37,9 +34,9 @@ public class TrackPlotter {
     private Graphics2D    _gc;
 
     private Double        _filtering;
-    private Dimension     _size;
-    private Rectangle2D   _bounds;
-    private Color         _backgroundColor;
+    private final Dimension     _size;
+    private final Rectangle2D   _bounds;
+    private final Color         _backgroundColor;
 
     public TrackPlotter (Dimension size, Rectangle2D bounds, Color backgroundColor) {
         _size = size;

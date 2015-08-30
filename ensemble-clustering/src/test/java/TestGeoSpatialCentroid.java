@@ -22,17 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
 
 import com.oculusinfo.ml.feature.spatial.GeoSpatialFeature;
 import com.oculusinfo.ml.feature.spatial.centroid.GeoSpatialCentroid;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 
 public class TestGeoSpatialCentroid {
 
-	double epsilon = 0.00001;
+	final double epsilon = 0.00001;
 	
 	private boolean isEqual(double d1, double d2) {
 		return (Math.abs( d1 - d2 ) < epsilon );

@@ -24,9 +24,8 @@
  */
 package com.oculusinfo.ml;
 
-import org.junit.Test;
-
 import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
+import org.junit.Test;
 
 public class TestNormalization {
 

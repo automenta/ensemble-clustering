@@ -24,16 +24,11 @@
  */
 package com.oculusinfo.ml.stats;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.PriorityQueue;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.oculusinfo.ml.feature.Feature;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class FeatureFrequencyTable implements Serializable {
 	private static final long serialVersionUID = 2702669296496944069L;

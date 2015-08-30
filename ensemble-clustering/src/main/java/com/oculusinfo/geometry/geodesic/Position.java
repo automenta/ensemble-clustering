@@ -24,11 +24,11 @@
  */
 package com.oculusinfo.geometry.geodesic;
 
-import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
-
 import com.oculusinfo.math.algebra.AngleUtilities;
 import com.oculusinfo.math.linearalgebra.Vector;
+
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 
 
@@ -55,7 +55,7 @@ public class Position implements Serializable {
     private boolean            _baseFormIsPolar;
     private Vector             _polar;     // Longutude, Latitude [, Elevation]
     private Vector             _cartesian; // X, Y, Z
-    private boolean            _elevationUsed;
+    private final boolean            _elevationUsed;
 
     /**
      * Create an object that represents a position on the surface of the Earth

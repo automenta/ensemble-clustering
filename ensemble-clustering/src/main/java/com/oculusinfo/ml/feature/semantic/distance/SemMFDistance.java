@@ -42,7 +42,7 @@ import com.oculusinfo.ml.feature.semantic.SemanticFeature;
  */
 public class SemMFDistance extends DistanceFunction<SemanticFeature> {
 	private static final long serialVersionUID = -7485093350764491674L;
-	private Concept taxonomy;
+	private final Concept taxonomy;
 	
 	public SemMFDistance(Concept taxonomy) {
 		this(taxonomy, 1);

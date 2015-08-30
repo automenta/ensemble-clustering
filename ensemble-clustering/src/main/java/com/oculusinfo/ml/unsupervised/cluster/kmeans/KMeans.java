@@ -44,8 +44,8 @@ import java.util.List;
  */
 public class KMeans extends AbstractClusterer {
 	
-	protected int k;
-	protected int maxIterations;
+	protected final int k;
+	protected final int maxIterations;
 	protected boolean debugClusters;
 	
 	public KMeans(int k, int maxIterations, boolean penalizeMissingFeatures) {
