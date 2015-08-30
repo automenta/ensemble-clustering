@@ -4,10 +4,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-final public class DataSetIterator implements Iterator<Instance> {
-    final Iterator<Map.Entry<String, Instance>> iterator;
+final public class DataSetIterator<K> implements Iterator<Instance<K>> {
+    final Iterator<Map.Entry<K, Instance<K>>> iterator;
 
-	public DataSetIterator(Map<String, Instance> map) {
+	public DataSetIterator(Map<K, Instance<K>> map) {
         this.iterator = map.entrySet().iterator();
     }
 
@@ -17,7 +17,7 @@ final public class DataSetIterator implements Iterator<Instance> {
     }
 
 	@Override
-    public final Instance next() {
+    public final Instance<K> next() {
         return iterator.next().getValue();
     }
 

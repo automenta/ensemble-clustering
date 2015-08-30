@@ -60,7 +60,7 @@ public class TestTrackCluster {
 	public void clusterRandomTracks (int N, int T, int P, boolean visible) {
         TrackFrame frame = new TrackFrame();
 
-        DataSet ds = new DataSet();
+        DataSet<String> ds = new DataSet<String>();
         
         log.info("Creating {} track splines as bases", N);
         
@@ -75,16 +75,16 @@ public class TestTrackCluster {
         
         log.info("Creating {} track per track bases", T);
         // Now create a hundred random tracks from each
-        List<Track> tracks = new ArrayList<Track>();
+        List<Track> tracks = new ArrayList<>();
         for (int j=0; j<T; ++j) {
             for (int i=0; i<N; ++i) {
                 Track track = new GeodeticTrack(GEODETIC_PARAMETERS, randomPoints(trackBases[i], P));
                 
                 // add the track as an instance to the dataset
-                Instance inst = new Instance();
+                Instance<String> inst = new Instance<String>();
                 TrackFeature feature = new TrackFeature("track");
                 feature.setValue(track);
-                inst.addFeature(feature);
+                inst.add(feature);
                 inst.setClassLabel( Integer.toString(i));  // set the generating spline as the class label for verification
                 ds.add(inst);
                 
@@ -134,7 +134,7 @@ public class TestTrackCluster {
         }
         double totalTime = times[N-1];
 
-        List<Vector> points = new ArrayList<Vector>();
+        List<Vector> points = new ArrayList<>();
         for (int i = 0; i < N; ++i) {
             times[i] = times[i] / totalTime;
             points.add(new Vector(minX + Math.random() * width,
@@ -153,7 +153,7 @@ public class TestTrackCluster {
         }
         double totalTime = times[N-1];
 
-        List<Position> points = new ArrayList<Position>(N);
+        List<Position> points = new ArrayList<>(N);
         for (int i=1; i<N-1; ++i) {
             double t = times[i]/totalTime;
             Vector point = basis.getPoint(t);
@@ -174,8 +174,8 @@ public class TestTrackCluster {
         private Rectangle2D        _drawingBounds;
 
         public TrackFrame () {
-            _splines = new ArrayList<CubicBSpline>();
-            _clusters = new ArrayList<Cluster>();
+            _splines = new ArrayList<>();
+            _clusters = new ArrayList<>();
             _drawingBounds = null;
         }
 
@@ -259,7 +259,7 @@ public class TestTrackCluster {
             	Color color = colors[i];
             	i++;
             	
-            	for (Instance inst: cluster.getMembers()) {
+            	for (Instance<String> inst: cluster.getMembers()) {
             		Track track = ((TrackFeature)inst.getFeature("track")).getValue();
             		
             		g2.setColor(color.darker());

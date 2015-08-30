@@ -80,7 +80,7 @@ public class TrackClusterWrapper {
     }
 
     public TrackClusterWrapper (Collection<Cluster> clusters) {
-        _statistics = new HashMap<String, StatTracker>();
+        _statistics = new HashMap<>();
         _clusterName = null;
         _clusterColor = null;
 
@@ -92,12 +92,12 @@ public class TrackClusterWrapper {
     }
 
     private void initializeTracks (Collection<Cluster> clusters) {
-        _tracks = new ArrayList<Track>();
+        _tracks = new ArrayList<>();
         _trueMean = null;
 
         // Pull all tracks out of the cluster, and calculate their true mean
         for (Cluster cluster: clusters) {
-            for (Instance instance : cluster.getMembers()) {
+            for (Instance<String> instance : cluster.getMembers()) {
                 for (Feature f : instance.getAllFeatures()) {
                 	if (f instanceof TrackFeature) {
                 		TrackFeature tf = (TrackFeature) f;
@@ -116,7 +116,7 @@ public class TrackClusterWrapper {
         }
 
         // Sort them in order of distance from the true mean
-        _distancesFromTrueMean = new HashMap<Track, Double>();
+        _distancesFromTrueMean = new HashMap<>();
         for (Track track: _tracks) {
             _distancesFromTrueMean.put(track, track.getDistance(_trueMean));
         }
@@ -165,7 +165,7 @@ public class TrackClusterWrapper {
         }
 
         // Precalculate distances from practical mean and total standard deviation
-        _distanceFromPracticalMean = new HashMap<Track, Double>();
+        _distanceFromPracticalMean = new HashMap<>();
         double variance = 0.0;
         for (Track track: _tracks) {
             double distance = track.getDistance(_practicalMean);

@@ -78,8 +78,8 @@ public class ThresholdClusterer extends AbstractClusterer {
 	}
 	
 	@Override
-	protected boolean isCandidate(Instance inst, Cluster candidate,
-			double score, Cluster best, double bestScore) {
+	protected boolean isCandidate(Instance<String> inst, Cluster candidate,
+								  double score, Cluster best, double bestScore) {
 		
 		return (score < threshold && score < bestScore);  // lower score less than threshold is better
 	}

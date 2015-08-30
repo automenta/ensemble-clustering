@@ -33,7 +33,7 @@ import java.io.Serializable;
  * @author slangevin
  *
  */
-public interface ClusterResult extends Iterable<Cluster>, Serializable {
+public interface ClusterResult<K,V> extends Iterable<Cluster<K,V>>, Serializable {
 
 	boolean isEmpty();
 	

@@ -25,10 +25,10 @@
 package com.oculusinfo.ml;
 
 import com.oculusinfo.ml.feature.Feature;
-import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /***
  * DataSet represents a structured collection of data instances that is the input 
@@ -37,12 +37,11 @@ import java.util.*;
  * @author slangevin
  *
  */
-public class DataSet implements Serializable, Iterable<Instance> {
-	private static final long serialVersionUID = -544003860939601075L;
-	
-	private final Map<String, Instance> map = new LinkedHashMap<String, Instance>();
+public class DataSet<K,F,V> implements Serializable, Iterable<Instance<K,F,V>> {
 
-	public Set<String> getKeys() {
+	private final Map<K, Instance<K,F,V>> map = new LinkedHashMap<>();
+
+	public Set<K> getKeys() {
 		return map.keySet();
 	}
 	
@@ -51,7 +50,7 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * @param inst the Instance to add
 	 * @return whether an instance was replace with the same id
 	 */
-	public boolean add(Instance inst) {
+	public boolean add(Instance<K,F,V> inst) {
 		return (map.put(inst.getId(), inst) != null);
 	}
 	
@@ -60,8 +59,11 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * @param inst the Instance to remove
 	 * @return the removed Instance
 	 */
-	public Instance remove(Instance inst) {
+	public Instance<K,F,V> remove(Instance<K,F,V> inst) {
 		return map.remove(inst.getId());
+	}
+	public Instance<K,F,V> remove(K inst) {
+		return map.remove(inst);
 	}
 
 	/***
@@ -69,7 +71,7 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * @param id the id of the Instance to return
 	 * @return the Instance with id or null if no Instance exists
 	 */
-	public Instance get(String id) {
+	public Instance<K,F,V> get(K id) {
 		return map.get(id);
 	}
 	
@@ -86,8 +88,8 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * @param fraction fraction of Instances to return in the range of 0 and 1
 	 * @return resulting sample DataSet
 	 */
-	public DataSet sample(double fraction) {
-		DataSet sample = new DataSet();
+	public DataSet<K,F,V> sample(double fraction) {
+		DataSet<K,F,V> sample = new DataSet<>();
 		
 		// max fraction is 1
 		if (fraction > 1) fraction = 1;
@@ -97,10 +99,10 @@ public class DataSet implements Serializable, Iterable<Instance> {
 		
 		long numToSample = Math.round( map.size() * fraction );
 		
-		ArrayList<String> keys = new ArrayList<String>(map.keySet());
+		ArrayList<K> keys = new ArrayList<>(map.keySet());
 		
 		// randomly pick k instances as the initial k means
-		ArrayList<String> indexes = new ArrayList<String>(keys.size()); 
+		ArrayList<K> indexes = new ArrayList<>(keys.size());
 		for (int i = 0; i < indexes.size(); i++) {
 			indexes.add( keys.get(i) );
 		}
@@ -111,35 +113,36 @@ public class DataSet implements Serializable, Iterable<Instance> {
 		return sample;
 	}
 	
-	private void swap(Instance a, Instance b) {
-		Instance tmp = a;
-		a = b;
-		b = tmp;
-	}
-	
-	private void shuffle(Instance[] array) {
-		Random rnd = new Random();
+
+	static private void shuffle(final Instance[] array) {
 		int n = array.length;
 
+		final Random rnd = ThreadLocalRandom.current();
 		while (n > 1) {
 			int k = rnd.nextInt(n);
 			n--;
-			swap(array[n], array[k]);
+			swap(array, n, k);
 		}
 	}
-	
+
+	private static void swap(final Instance[] array, final int n, final int k) {
+		final Instance t = array[n];
+		array[n] = array[k];
+		array[k] = t;
+	}
+
 	/***
 	 * Randomly split this DataSet into n similarly sized DataSets.
 	 * @param n the number of folds to split the DataSet - value must be greater than 1 and not greater than the number of instances in DataSet
 	 * @return a list of n DataSets
 	 */
-	public List<DataSet> nFolds(int n) {
+	public List<DataSet<K,F,V>> nFolds(int n) {
 		// Make sure n is valid: each fold must have at least one instance!
 		if (n > size() || n < 1) return null;
 		
-		List<DataSet> folds = new LinkedList<DataSet>();
+		List<DataSet<K,F,V>> folds = new LinkedList<>();
 		
-		Instance[] instances = new Instance[size()];
+		Instance<K,F,V>[] instances = new Instance[size()];
 		instances = map.values().toArray(instances);
 		shuffle(instances);
 	
@@ -148,7 +151,7 @@ public class DataSet implements Serializable, Iterable<Instance> {
 		
 		// create n folds
 		for (int i=0; i < n; i++) {
-			DataSet fold = new DataSet();
+			DataSet<K,F,V> fold = new DataSet<>();
 			folds.add(fold);
 			
 			int start = i*sliceSize;
@@ -174,29 +177,36 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * 
 	 * @param featureName the name of the feature to normalize
 	 */
-	public void normalizeInstanceFeature(String featureName) {
-		List<Feature> allFeatures = new ArrayList<Feature>();
+	public void normalizeInstanceFeature(F featureName) {
+		ArrayList<Feature<F, V>> allFeatures = new ArrayList<>();
 		
 		// gather up all matching features
-		for (Instance inst : this) {
+		for (Instance<K,F,V> inst : this) {
 			if (inst.containsFeature(featureName)) {
 				allFeatures.add( inst.getFeature(featureName) );
 			}
 		}
+
+		final int s = allFeatures.size();
+
+		if (s == 0) return;
+
+		double N = s;
 		
-		if (allFeatures.isEmpty()) return;
-		
-		double N = allFeatures.size();
-		
+
+
+
+		V vv = allFeatures.get(0).getValue();
+
 		// currently only support normalizing numeric vector features
-		if ( (allFeatures.get(0) instanceof NumericVectorFeature) == false ) return;
-		
-		double[] meanVector = ((NumericVectorFeature)allFeatures.get(0)).getValue().clone();
+		if (!(vv instanceof double[])) return;
+
+		double[] meanVector = ((double[])vv).clone();
 		
 		// compute mean of feature
-		for (int i=1; i < allFeatures.size(); i++) {
-			NumericVectorFeature v = (NumericVectorFeature)allFeatures.get(i);
-			double[] vals = v.getValue();
+		for (int i = 1; i < s; i++) {
+
+			double[] vals = (double[])allFeatures.get(i).getValue();
 			
 			for (int j=0; j < meanVector.length; j++) {
 				meanVector[j] += vals[j];
@@ -209,9 +219,9 @@ public class DataSet implements Serializable, Iterable<Instance> {
 		double[] stdevVector = new double[meanVector.length];
 		
 		// compute stdev of feature
-		for (int i=0; i < allFeatures.size(); i++) {
-			NumericVectorFeature v = (NumericVectorFeature)allFeatures.get(i);
-			double[] vals = v.getValue();
+		for (int i = 0; i < s; i++) {
+			double[] vals = (double[])allFeatures.get(i).getValue();
+
 			
 			for (int j=0; j < meanVector.length; j++) {
 				stdevVector[j] += (vals[j] - meanVector[j])*(vals[j] - meanVector[j]);
@@ -222,9 +232,8 @@ public class DataSet implements Serializable, Iterable<Instance> {
 		}
 		
 		// normalize each feature vector
-		for (int i=0; i < allFeatures.size(); i++) {
-			NumericVectorFeature v = (NumericVectorFeature)allFeatures.get(i);
-			double[] vals = v.getValue();
+		for (int i = 0; i < s; i++) {
+			double[] vals = (double[])allFeatures.get(i).getValue();
 			
 			for (int j=0; j < vals.length; j++) {
 				vals[j] = (vals[j] - meanVector[j]) / stdevVector[j];
@@ -233,7 +242,7 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	}
 	 
 	@Override
-	public Iterator<Instance> iterator() {
+	public Iterator<Instance<K,F,V>> iterator() {
 		return new DataSetIterator(map);
 	}
 
@@ -242,10 +251,10 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * @param c the Instances to add
 	 * @return true if an existing Instance with a matching id in the DataSet was replaced 
 	 */
-	public boolean addAll(Collection<Instance> c) {
+	public boolean addAll(Collection<Instance<K,F,V>> c) {
 		boolean altered = false;
 		
-		for (Instance i : c) {
+		for (Instance<K,F,V> i : c) {
 			if ( add(i) ) altered = true;
 		}
 		return altered;
@@ -263,8 +272,7 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * @param inst the Instance to test
 	 * @return true if the Instance is a member of the DataSet
 	 */
-	public boolean contains(Instance inst) {
-		//return map.containsKey(inst);
+	public boolean contains(Instance<K,F,V> inst) {
 		return map.containsValue(inst);
 	}
 
@@ -273,8 +281,8 @@ public class DataSet implements Serializable, Iterable<Instance> {
 	 * @param c the Instances to test
 	 * @return true if the Instances are all members of the DataSet
 	 */
-	public boolean containsAll(Collection<Instance> c) {
-		for (Instance i : c) {
+	public boolean containsAll(Collection<Instance<K,F,V>> c) {
+		for (Instance<K,F,V> i : c) {
 			if (map.containsKey(i.getId()) == false) return false;
 		}
 		return true;

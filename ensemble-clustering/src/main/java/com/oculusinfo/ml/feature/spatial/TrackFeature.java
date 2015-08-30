@@ -33,10 +33,7 @@ import com.oculusinfo.ml.feature.Feature;
  * @author slangevin
  *
  */
-public class TrackFeature extends Feature {
-    private static final long serialVersionUID = -7923265691042687996L;
-
-
+public class TrackFeature<K> extends Feature<K, Object> {
 
     private Track track;
     
@@ -49,7 +46,7 @@ public class TrackFeature extends Feature {
         super();
     }
     
-    public TrackFeature(String name) {
+    public TrackFeature(K name) {
         super(name);
     }
 

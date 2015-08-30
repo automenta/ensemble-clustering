@@ -40,7 +40,7 @@ public class Cohesion {
 	public static double cohesion(Clusterer clusterer, Cluster cluster) {
 		double norm = cluster.size();
 		double cohesion = 0;
-		for (Instance inst : cluster.getMembers()) {
+		for (Instance<String> inst : cluster.getMembers()) {
 			if (inst instanceof Cluster) {
 				cohesion += cohesion(clusterer, (Cluster)inst);
 			}

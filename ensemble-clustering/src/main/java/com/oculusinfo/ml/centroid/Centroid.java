@@ -28,6 +28,7 @@ import com.oculusinfo.ml.feature.Feature;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.function.Supplier;
 
 /***
  * Interface that all Cluster Centroid objects must implement
@@ -36,7 +37,9 @@ import java.util.Collection;
  *
  * @param <T>
  */
-public interface Centroid<T extends Feature> extends Serializable {
+public interface Centroid<F, V> extends Serializable {
+
+
 
 	/***
 	 * Add an Instance feature to this centroid. 
@@ -45,27 +48,27 @@ public interface Centroid<T extends Feature> extends Serializable {
 	 * 
 	 * @param feature feature to add to this centroid
 	 */
-    void add(T feature);
+    void add(Feature<F, V> feature);
 
     /***
      * Remove an Instance feature from this centroid
      * 
      * @param feature
      */
-    void remove(T feature);
+    void remove(Feature<F, V> feature);
 
-	void setName(String name);
+	void setName(F name);
 
-	String getName();
+	F getName();
 
-	Class<T> getType();
+
 
 	void reset();
 	
     /**
      * Get the centroid value represented
      */
-    T getCentroid();
+    Feature<F, V> getCentroid();
 
     /**
      * Get the centroid value represented, modified to be aggregatable with
@@ -73,5 +76,7 @@ public interface Centroid<T extends Feature> extends Serializable {
      * may contain more information (see, for example, semantic and word
      * frequency centroids)
      */
-    Collection<T> getAggregatableCentroid();
+    Collection<Feature<F, V>> getAggregatableCentroid();
+
+    //Supplier<Feature<F, V>> builder();
 }

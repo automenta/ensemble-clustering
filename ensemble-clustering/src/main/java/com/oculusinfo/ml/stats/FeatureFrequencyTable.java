@@ -30,17 +30,17 @@ import com.oculusinfo.ml.feature.Feature;
 import java.io.Serializable;
 import java.util.*;
 
-public class FeatureFrequencyTable implements Serializable {
-	private static final long serialVersionUID = 2702669296496944069L;
-	private Map<String, FeatureFrequency> table = new HashMap<String, FeatureFrequency>();
+public class FeatureFrequencyTable<K> implements Serializable {
+
+	private Map<K, FeatureFrequency<K>> table = new HashMap<>();
 	
 	public FeatureFrequencyTable() { }
 	
-	public boolean containsFeature(Feature feature) {
+	public boolean containsFeature(Feature<K, Object> feature) {
 		return table.containsKey(feature.getId());
 	}
 	
-	public FeatureFrequency remove(Feature feature) {
+	public FeatureFrequency remove(Feature<K, Object> feature) {
 		return table.remove(feature.getId());
 	}
 	
@@ -48,23 +48,23 @@ public class FeatureFrequencyTable implements Serializable {
 		return table.remove(freq.feature.getId());
 	}
 	
-	public FeatureFrequency add(FeatureFrequency freq) {
+	public FeatureFrequency<K> add(FeatureFrequency<K> freq) {
 		if (containsFeature(freq.feature) == false) {
-			FeatureFrequency f = new FeatureFrequency(freq.feature);
+			FeatureFrequency<K> f = new FeatureFrequency(freq.feature);
 			f.frequency = freq.frequency;
 			return table.put(freq.feature.getId(), f);
 		}
 		return incrementBy(freq.feature, freq.frequency);
 	}
 	
-	public FeatureFrequency add(Feature feature) {
+	public FeatureFrequency add(Feature<K, Object> feature) {
 		if (containsFeature(feature) == false) {
-			return table.put(feature.getId(), new FeatureFrequency(feature));
+			return table.put(feature.getId(), new FeatureFrequency<K>(feature));
 		}
 		return increment(feature);
 	}
 	
-	public FeatureFrequency get(Feature feature) {
+	public FeatureFrequency<K> get(Feature<K, Object> feature) {
 		return table.get(feature.getId());
 	}
 	
@@ -73,11 +73,11 @@ public class FeatureFrequencyTable implements Serializable {
 	}
 	
 	@JsonIgnore
-	public Collection<FeatureFrequency> getAll() {
+	public Collection<FeatureFrequency<K>> getAll() {
 		return table.values();
 	}
 	
-	public FeatureFrequency incrementBy(Feature feature, int increment) {
+	public FeatureFrequency incrementBy(Feature<K, Object> feature, int increment) {
 		FeatureFrequency freq = null;
 		if (containsFeature(feature)) {
 			freq = get(feature);
@@ -86,11 +86,11 @@ public class FeatureFrequencyTable implements Serializable {
 		return freq;
 	}
 	
-	public FeatureFrequency increment(Feature feature) {
+	public FeatureFrequency increment(Feature<K, Object> feature) {
 		return incrementBy(feature, 1);
 	}
 	
-	public FeatureFrequency decrementBy(Feature feature, int decrement) {
+	public FeatureFrequency decrementBy(Feature<K, Object> feature, int decrement) {
 		FeatureFrequency freq = null;
 		if (containsFeature(feature)) {
 			freq = get(feature);
@@ -100,24 +100,24 @@ public class FeatureFrequencyTable implements Serializable {
 		return freq;
 	}
 	
-	public FeatureFrequency decrement(Feature feature) {
+	public FeatureFrequency<K> decrement(Feature<K, Object> feature) {
 		return decrementBy(feature, 1);
 	}
 	
-	public Map<String, FeatureFrequency> getTable() {
+	public Map<K, FeatureFrequency<K>> getTable() {
 		return table;
 	}
 	
-	public void setTable(Map<String, FeatureFrequency> table) {
+	public void setTable(Map<K, FeatureFrequency<K>> table) {
 		this.table = table;
 	}
 	
-	public Collection<FeatureFrequency> getTopN(int n) {
-		Collection<FeatureFrequency> topN = new LinkedList<FeatureFrequency>();
-		PriorityQueue<FeatureFrequency> freq = new PriorityQueue<FeatureFrequency>(11, new FeatureFreqComparator());
+	public Collection<FeatureFrequency<K>> getTopN(int n) {
+		Collection<FeatureFrequency<K>> topN = new LinkedList<>();
+		PriorityQueue<FeatureFrequency<K>> freq = new PriorityQueue(11, FeatureFreqComparator.the);
 		
 		// sort features by decreasing frequency
-		for (FeatureFrequency f : table.values()) {
+		for (FeatureFrequency<K> f : table.values()) {
 			freq.add(f);
 		}
 		

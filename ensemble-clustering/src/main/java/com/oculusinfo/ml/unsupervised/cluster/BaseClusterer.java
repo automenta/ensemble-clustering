@@ -24,19 +24,19 @@
  */
 package com.oculusinfo.ml.unsupervised.cluster;
 
-import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.distance.DistanceFunction;
 import com.oculusinfo.ml.feature.Feature;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
-public abstract class BaseClusterer implements Clusterer {
+public abstract class BaseClusterer<K,F,V> implements Clusterer<K,F,V> {
 
-	protected ClusterFactory clusterFactory;
+	protected ClusterFactory<K,F,V> clusterFactory;
 	protected final boolean onlineUpdate;
-	protected final Map<String, FeatureTypeDefinition> typeDefs = new HashMap<String, FeatureTypeDefinition>();
+	protected final Map<V, FeatureValueDefinition<F,V>> typeDefs = new HashMap<>();
 	
 	public BaseClusterer(boolean onlineUpdate) {
 		this.onlineUpdate = onlineUpdate;
@@ -58,8 +58,8 @@ public abstract class BaseClusterer implements Clusterer {
 	 * @param distFunc is the distance function to be used for calculating distance for this feature type
 	 */
 	@SuppressWarnings("rawtypes")
-	public void registerFeatureType(String name, Class<? extends Centroid> centroidClass, DistanceFunction distFunc) {
-		typeDefs.put(name, new FeatureTypeDefinition(name, centroidClass, distFunc));
+	public void registerFeatureType(V name, Supplier<Feature<F, V>> centroidClass, DistanceFunction<K> distFunc) {
+		typeDefs.put(name, new FeatureValueDefinition(name, centroidClass, distFunc));
 	}
 	
 	/***
@@ -69,45 +69,44 @@ public abstract class BaseClusterer implements Clusterer {
 	 * @return the distance function
 	 */
 	@SuppressWarnings("unchecked")
-	public DistanceFunction<Feature> getDistanceFunction(String featureName) {
-		DistanceFunction<Feature> func = null;
-		if (typeDefs.containsKey(featureName)) {
-			func = typeDefs.get(featureName).distFunc;
-		}
-		return func;
+	public DistanceFunction<Feature<F, V>> getDistanceFunction(V featureName) {
+		FeatureValueDefinition<F, V> d = typeDefs.get(featureName);
+		if (d != null)
+			return d.distFunc;
+		return null;
 	}
 	
-	/***
-	 * Method to return the associated centroid class for feature name.
-	 * 
-	 * @param the name of the feature
-	 * @return the centroid class
-	 */
-	@SuppressWarnings("rawtypes")
-	public Class<? extends Centroid> getCentroidClass(String featureName) {
-		Class<? extends Centroid> centroidClass = null;
-		if (typeDefs.containsKey(featureName)) {
-			centroidClass = typeDefs.get(featureName).centroidClass;
-		}
-		return centroidClass;
-	}
+//	/***
+//	 * Method to return the associated centroid class for feature name.
+//	 *
+//	 * @param the name of the feature
+//	 * @return the centroid class
+//	 */
+//	@SuppressWarnings("rawtypes")
+//	public Class<? extends Centroid> getCentroidClass(V featureName) {
+//		Class<? extends Centroid> centroidClass = null;
+//		if (typeDefs.containsKey(featureName)) {
+//			centroidClass = typeDefs.get(featureName).centroidClass;
+//		}
+//		return centroidClass;
+//	}
 	
 	/***
 	 * Method to return feature types registered with this clusterer.
 	 * 
 	 * @return a collection of feature type definitions
 	 */
-	public Collection<FeatureTypeDefinition> getTypeDefs() {
+	public Collection<FeatureValueDefinition<F, V>> getTypeDefs() {
 		return typeDefs.values();
 	}
 	
-	/***
-	 * Public method for creating a new cluster instance. The new cluster is associated with
-	 * the centroids for each feature.
-	 * 
-	 * @return the new cluster instance
-	 */
-	public Cluster createCluster() {
-		return (new ClusterFactory(this.typeDefs, onlineUpdate)).create();
-	}
+//	/***
+//	 * Public method for creating a new cluster instance. The new cluster is associated with
+//	 * the centroids for each feature.
+//	 *
+//	 * @return the new cluster instance
+//	 */
+//	public DefaultClusterFactory createCluster() {
+//		return (new DefaultClusterFactory(this.typeDefs, onlineUpdate)).create();
+//	}
 }

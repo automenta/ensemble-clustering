@@ -32,11 +32,13 @@ import java.util.Date;
  * A TemporalFeature represents a time period with as start and end date
  * 
  * Useful for representing events
- * 
+ *
+ * TODO store as unixtime long, not Date
+ *
  * @author slangevin
  *
  */
-public class TemporalFeature extends Feature {
+public class TemporalFeature<K> extends Feature<K, Object> {
 	private static final long serialVersionUID = 679871263379162267L;
 	private Date start;
 	private Date end;
@@ -50,7 +52,7 @@ public class TemporalFeature extends Feature {
 		super();
 	}
 	
-	public TemporalFeature(String name) {
+	public TemporalFeature(K name) {
 		super(name);
 	}
 	

@@ -41,84 +41,84 @@ public class TestStringClusteringWithDPMeans {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		DataSet ds = new DataSet();
+		DataSet<String> ds = new DataSet<String>();
 		
-		Instance inst = new Instance("1");
+		Instance<String> inst = new Instance<String>("1");
 		StringFeature feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("jack black");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("2");
+		inst = new Instance<String>("2");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("jack black");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("3");
+		inst = new Instance<String>("3");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("jack");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("4");
+		inst = new Instance<String>("4");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("jack l. black");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("5");
+		inst = new Instance<String>("5");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("j. black");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("6");
+		inst = new Instance<String>("6");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("j black");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("7");
+		inst = new Instance<String>("7");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("black");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("8");
+		inst = new Instance<String>("8");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("jackie black");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("9");
+		inst = new Instance<String>("9");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("jack brown");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("10");
+		inst = new Instance<String>("10");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("jackie green");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("11");
+		inst = new Instance<String>("11");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("bob");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("12");
+		inst = new Instance<String>("12");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("bobbie");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("13");
+		inst = new Instance<String>("13");
 		feature = new StringFeature(FEATURE_NAME1);
 		feature.setValue("jackie");
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
 		DPMeans clusterer = new DPMeans(5, false);

@@ -62,18 +62,19 @@ public class DPMeans extends KMeans {
 		this.threshold = threshold;
 	}
 	
-	private List<Cluster> initKMeans(DataSet ds) {
-		List<Cluster> kmeans = new LinkedList<Cluster>();
+	private List<Cluster> initKMeans(DataSet<String> ds) {
+		List<Cluster> kmeans = new LinkedList<>();
 		
 		int ki = (ds.size() < k) ? ds.size(): k;
 		
 		// randomly pick k instances as the initial k means
-		ArrayList<String> indexes = new ArrayList<String>(ds.size()); 
-		ArrayList<String> keys = new ArrayList<String>(ds.getKeys());
-	    for (int i = 0; i < keys.size(); i++) {
-	        indexes.add( keys.get(i) );
-	    }
+		ArrayList<String> keys = new ArrayList<>(ds.getKeys());
+
+		ArrayList<String> indexes = new ArrayList<>(ds.size());
+		indexes.addAll(keys);
+
 	    Collections.shuffle(indexes);
+
 	    for (int i = 0; i < ki; i++) {
 	    	Cluster c = this.createCluster();
 	    	c.add( ds.get(indexes.get(i)) );
@@ -87,7 +88,7 @@ public class DPMeans extends KMeans {
 		double error = 0;
 		
 		for (Cluster c : clusters) {
-			for (Instance i : c.getMembers()) {
+			for (Instance<String> i : c.getMembers()) {
 				error += this.distance(c, i);
 			}
 		}
@@ -98,7 +99,7 @@ public class DPMeans extends KMeans {
 	}
 	
 	@Override
-	public ClusterResult doCluster(DataSet ds) {
+	public ClusterResult doCluster(DataSet<String> ds) {
 		boolean converged = false;
 		List<Cluster> kmeans = initKMeans(ds);
 		ClusterResult clusters = null;
@@ -142,8 +143,8 @@ public class DPMeans extends KMeans {
 	}
 
 	@Override
-	protected boolean isCandidate(Instance inst, Cluster candidate,
-			double score, Cluster best, double bestScore) {
+	protected boolean isCandidate(Instance<String> inst, Cluster candidate,
+								  double score, Cluster best, double bestScore) {
 		return (score < threshold && score < bestScore);  // lower score less than threshold is better
 	}
 

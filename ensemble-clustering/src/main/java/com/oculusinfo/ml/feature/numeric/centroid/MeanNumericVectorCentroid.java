@@ -25,7 +25,7 @@
 package com.oculusinfo.ml.feature.numeric.centroid;
 
 import com.oculusinfo.ml.centroid.Centroid;
-import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
+import com.oculusinfo.ml.feature.Feature;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,14 +36,22 @@ import java.util.Collections;
  * @author slangevin
  *
  */
-public class MeanNumericVectorCentroid implements Centroid<NumericVectorFeature>  {
-	private static final long serialVersionUID = 8127455596937762659L;
-	private String name;
+public class MeanNumericVectorCentroid<F> implements Centroid<F,double[]>  {
+	//private NumericVectorFeature<F> name;
 	private double weight;
 	private double[] meanVector;
-	
+	private F name;
+
+//	@Override
+//	public Supplier<Feature<F, double[]>> builder() {
+//		return () -> {
+//			return new Feature();
+//		};
+//	}
+
+
 	@Override
-	public void add(NumericVectorFeature feature) {
+	public void add(Feature<F, double[]> feature) {
 		double addedWeight = feature.getWeight();
 		double newWeight = weight + addedWeight;
 
@@ -65,7 +73,7 @@ public class MeanNumericVectorCentroid implements Centroid<NumericVectorFeature>
 	}
 
 	@Override
-	public void remove(NumericVectorFeature feature) {
+	public void remove(Feature<F, double[]> feature) {
 	    double removedWeight = feature.getWeight();
 	    double newWeight = weight - removedWeight;
 
@@ -78,35 +86,27 @@ public class MeanNumericVectorCentroid implements Centroid<NumericVectorFeature>
 		weight = newWeight;
 	}
 
+
 	@Override
-	public void setName(String name) {
+	public void setName(F name) {
 		this.name = name;
 	}
 
 	@Override
-	public String getName() {
-		return this.name;
+	public F getName() {
+		return name;
 	}
 
 	@Override
-	public Class<NumericVectorFeature> getType() {
-		return NumericVectorFeature.class;
-	}
-
-    @Override
-    public Collection<NumericVectorFeature> getAggregatableCentroid() {
+    public Collection<Feature<F,double[]>> getAggregatableCentroid() {
         return Collections.singleton(getCentroid());
     }
 
 	@Override
-	public NumericVectorFeature getCentroid() {
+	public Feature<F,double[]> getCentroid() {
 		// create the centroid geospatial feature set
-		NumericVectorFeature mean = new NumericVectorFeature(name);
-		
-		mean.setValue(meanVector);
-		mean.setWeight(weight);
-				
-		return mean;
+		//NumericVectorFeature<F> mean = new NumericVectorFeature(name);
+		return new Feature(name, meanVector, weight);
 	}
 
 	@Override

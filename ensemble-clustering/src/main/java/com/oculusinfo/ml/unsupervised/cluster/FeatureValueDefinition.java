@@ -10,10 +10,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
  * of the Software, and to permit persons to whom the Software is furnished to do
  * so, subject to the following conditions:
- *
+
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,37 +22,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oculusinfo.ml.spark;
-import java.util.ArrayList;
-import java.util.List;
+package com.oculusinfo.ml.unsupervised.cluster;
 
-public class CsvParser {	
-	public static List<String> fsmParse(String input) {
-		ArrayList<String> result = new ArrayList<String>();
-		int startChar = 0;
-		int endChar = 0;
-		boolean inString = false;
-		while(endChar<input.length()) {
-			char c = input.charAt(endChar);
-			if (inString) {
-				endChar++;
-				if (c=='"') {
-					if (endChar<input.length()&&input.charAt(endChar)=='"') {
-						endChar++;
-					} else {
-						inString = false;
-					}
-				}
-			} else {
-				endChar++;
-				if (c==',') {
-					result.add(input.substring(startChar, endChar-1));
-					startChar = endChar;
-				} else if (c=='"') {
-					inString = true;
-				}
-			}
-		}
-		return result;
+import com.oculusinfo.ml.centroid.Centroid;
+import com.oculusinfo.ml.distance.DistanceFunction;
+
+import java.io.Serializable;
+import java.util.function.Supplier;
+
+public class FeatureValueDefinition<F,V> implements Serializable {
+	private static final long serialVersionUID = -8378567604749382148L;
+	public final F featureName;
+	@SuppressWarnings("rawtypes")
+	public final DistanceFunction distFunc;
+	@SuppressWarnings("rawtypes")
+	public final Supplier<Centroid<F,V>> builder;
+	
+	@SuppressWarnings("rawtypes")
+	public FeatureValueDefinition(F featureName,
+								  Supplier<Centroid<F,V>> builder,
+								  //Class<? extends Centroid> centroidClass,
+								  DistanceFunction distFunc) {
+		this.distFunc = distFunc;
+		this.featureName = featureName;
+		this.builder = builder;
 	}
 }

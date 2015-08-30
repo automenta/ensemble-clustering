@@ -37,14 +37,14 @@ import java.util.Date;
  * @author slangevin
  *
  */
-public class TemporalCentroid implements Centroid<TemporalFeature> {
+public class TemporalCentroid<K> implements Centroid<TemporalFeature<K>> {
 	private static final long serialVersionUID = -8692407140201096772L;
 	private String name;
 	private double weight = 0.0;
 	private long cstart = 0, cend = 0;
 	
 	@Override
-	public void add(TemporalFeature feature) {
+	public void add(TemporalFeature<K> feature) {
 	    double addedWeight = feature.getWeight();
 		long start = 0, end = 0;
 		
@@ -60,7 +60,7 @@ public class TemporalCentroid implements Centroid<TemporalFeature> {
 	}
 	
 	@Override
-	public void remove(TemporalFeature feature) {
+	public void remove(TemporalFeature<K> feature) {
 	    double removedWeight = feature.getWeight();
 		long start = 0, end = 0;
 		
@@ -80,12 +80,12 @@ public class TemporalCentroid implements Centroid<TemporalFeature> {
 	}
 
 	@Override
-	public Collection<TemporalFeature> getAggregatableCentroid () {
+	public Collection<TemporalFeature<K>> getAggregatableCentroid () {
 	    return Collections.singleton(getCentroid());
 	}
 
 	@Override
-	public TemporalFeature getCentroid() {
+	public TemporalFeature<K> getCentroid() {
 		// create the centroid temporal feature set
 		TemporalFeature centroid = new TemporalFeature(name);
 		centroid.setValue(new Date(Math.round(cstart/weight)),
@@ -96,18 +96,13 @@ public class TemporalCentroid implements Centroid<TemporalFeature> {
 	}
 
 	@Override
-	public void setName(String name) {
+	public void setLabel(String name) {
 		this.name = name;
 	}
 
 	@Override
 	public String getName() {
 		return this.name;
-	}
-
-	@Override
-	public Class<TemporalFeature> getType() {
-		return TemporalFeature.class;
 	}
 
 	@Override

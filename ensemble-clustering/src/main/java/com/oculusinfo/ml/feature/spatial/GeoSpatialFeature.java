@@ -32,42 +32,41 @@ import com.oculusinfo.ml.feature.Feature;
  * @author slangevin
  *
  */
-public class GeoSpatialFeature extends Feature {
-	private static final long serialVersionUID = 7917681828048658982L;
-	private double latitude;
-	private double longitude;
+public class GeoSpatialFeature<F> extends Feature<F, double[]> {
+
+	final double[] latlon = new double[2];
 	
 	@Override
 	public String toString() {
-		return (this.getName() + ":[" + latitude + ';' + longitude + ']');
+		return (this.getName() + ":[" + latlon[0] + ';' + latlon[1] + ']');
 	}
 	
 	public GeoSpatialFeature() {
 		super();
 	}
 	
-	public GeoSpatialFeature(String name) {
+	public GeoSpatialFeature(F name) {
 		super(name);
 	}
 
 	public void setValue(double latitude, double longitude) {
-		this.latitude = latitude;
-		this.longitude = longitude;
+		latlon[0] = latitude;
+		latlon[1]  = longitude;
 	}
 	
 	public double getLatitude() {
-		return latitude;
+		return latlon[0];
 	}
 	
 	public void setLatitude(double latitude) {
-		this.latitude = latitude;
+		latlon[0] = latitude;
 	}
 	
 	public double getLongitude() {
-		return longitude;
+		return latlon[1];
 	}
 	
 	public void setLongitude(double longitude) {
-		this.longitude = longitude;
+		latlon[1] = longitude;
 	}
 }

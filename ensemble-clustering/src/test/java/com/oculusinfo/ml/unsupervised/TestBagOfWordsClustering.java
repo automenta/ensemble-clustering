@@ -44,111 +44,111 @@ public class TestBagOfWordsClustering {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		DataSet ds = new DataSet();
+		DataSet<String> ds = new DataSet<String>();
 		
-		Instance inst = new Instance("1");
+		Instance<String> inst = new Instance<String>("1");
 		BagOfWordsFeature feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("jack", 1);
 		feature.setCount("black", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		GeoSpatialFeature soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(39.76, -98.5);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 		
-		inst = new Instance("2");
+		inst = new Instance<String>("2");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("jack", 1);
 		feature.setCount("black", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		ds.add(inst);
 		
-		inst = new Instance("3");
+		inst = new Instance<String>("3");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("jack", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(39.76, -98.5);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 		
-		inst = new Instance("4");
+		inst = new Instance<String>("4");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("jack", 1);
 		feature.setCount("l.", 1);
 		feature.setCount("black", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(39.76, -98.5);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 		
-		inst = new Instance("5");
+		inst = new Instance<String>("5");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("j.", 1);
 		feature.setCount("black", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(39.76, -98.5);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 		
-		inst = new Instance("6");
+		inst = new Instance<String>("6");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("j", 1);
 		feature.setCount("black", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(39.76, -98.5);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 		
-		inst = new Instance("7");
+		inst = new Instance<String>("7");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("black", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(39.76, -98.5);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 		
-		inst = new Instance("8");
+		inst = new Instance<String>("8");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("jackie", 1);
 		feature.setCount("black", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(39.76, -98.5);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 		
-		inst = new Instance("9");
+		inst = new Instance<String>("9");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("jack", 1);
 		feature.setCount("brown", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(10.0, 8.0);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 		
-		inst = new Instance("10");
+		inst = new Instance<String>("10");
 		feature = new BagOfWordsFeature(FEATURE_NAME1);
 		feature.setCount("jackie", 1);
 		feature.setCount("green", 1);
-		inst.addFeature(feature);
+		inst.add(feature);
 		
 		soft = new GeoSpatialFeature(SOFT_FEATURE_NAME);
 		soft.setValue(39.76, -98.5);
-		inst.addFeature(soft);
+		inst.add(soft);
 		ds.add(inst);
 				
 		ThresholdClusterer clusterer = new ThresholdClusterer();

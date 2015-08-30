@@ -49,20 +49,20 @@ public class TestThresholdClusterer extends JFrame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		DataSet ds = new DataSet();
+		DataSet<String> ds = new DataSet<String>();
 		
 		Random rnd = new Random();
 		
 		// randomly generate a dataset of lat, lon points
 		for (int i = 0; i < 100000; i ++) {
-			Instance inst = new Instance();
+			Instance<String> inst = new Instance<String>();
 			NumericVectorFeature v = new NumericVectorFeature("point");
 		
 			double x = rnd.nextDouble();
 			double y = rnd.nextDouble();
 			v.setValue( new double[] { x, y } );
 		
-			inst.addFeature(v);
+			inst.add(v);
 			ds.add(inst);
 		}
 		
@@ -95,7 +95,7 @@ public class TestThresholdClusterer extends JFrame {
 
                 for (Cluster cluster : clusters) {
                 	Color c = new Color(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255));
-                	for (Instance inst : cluster.getMembers()) {
+                	for (Instance<String> inst : cluster.getMembers()) {
                 		g.setColor ( c );
                 		NumericVectorFeature v = (NumericVectorFeature)inst.getFeature("point");
                 		Ellipse2D l = new Ellipse2D.Double(v.getValue()[0] * 400.0, v.getValue()[1] * 400.0, 5, 5);

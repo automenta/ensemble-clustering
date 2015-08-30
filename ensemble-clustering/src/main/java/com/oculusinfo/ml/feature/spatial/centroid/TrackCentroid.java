@@ -36,10 +36,10 @@ import java.util.Collections;
  * 
  * @author nkronenfeld
  */
-public class TrackCentroid implements Centroid<TrackFeature>{
-    private static final long serialVersionUID = 1L;
+public class TrackCentroid<K> implements Centroid<TrackFeature<K>>{
 
-    private String name;
+
+    private String label;
     private double _weight;
     private Track  _centroid;
     private int    _changes;
@@ -85,33 +85,24 @@ public class TrackCentroid implements Centroid<TrackFeature>{
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public void setLabel(String name) {
+        this.label = name;
     }
 
     @Override
     public String getName() {
-        return this.name;
+        return this.label;
     }
 
-    // Erasure makes this definitionally ok; type checking at compile time
-    // should still happen, and nothing would be different at run time if we got
-    // something that the compiler though really was of the right type, properly
-    // generified.
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    @Override
-    public Class<TrackFeature> getType() {
-        return (Class) TrackFeature.class;
-    }
 
     @Override
-    public Collection<TrackFeature> getAggregatableCentroid () {
+    public Collection<TrackFeature<K>> getAggregatableCentroid () {
         return Collections.singleton(getCentroid());
     }
 
     @Override
-    public TrackFeature getCentroid() {
-        TrackFeature centroid = new TrackFeature(name);
+    public TrackFeature<K> getCentroid() {
+        TrackFeature<K> centroid = new TrackFeature(label);
         centroid.setValue(_centroid);
         centroid.setWeight(_weight);
         return centroid;

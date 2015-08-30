@@ -31,19 +31,19 @@ public class TestNormalization {
 
 	@Test
 	public void test() {
-		DataSet ds = new DataSet();
+		DataSet<String> ds = new DataSet<String>();
 		
 		for (int i=0; i < 5; i++) {
-			Instance inst = new Instance();
+			Instance<String> inst = new Instance<String>();
 			NumericVectorFeature v = new NumericVectorFeature("v");
 			v.setValue(new double[] {i, i*10, i*100});
-			inst.addFeature(v);
+			inst.add(v);
 			ds.add(inst);
 		}
 		
 		ds.normalizeInstanceFeature("v");
 		
-		for (Instance inst : ds) {
+		for (Instance<String> inst : ds) {
 			NumericVectorFeature v = (NumericVectorFeature)inst.getFeature("v");
 			double[] vals = v.getValue();
 			for (int i=0; i < vals.length; i++) {

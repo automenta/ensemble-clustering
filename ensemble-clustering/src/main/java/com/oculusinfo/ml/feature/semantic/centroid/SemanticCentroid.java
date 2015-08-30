@@ -24,14 +24,15 @@
  */
 package com.oculusinfo.ml.feature.semantic.centroid;
 
+import com.gs.collections.api.tuple.Pair;
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.semantic.SemanticFeature;
-import com.oculusinfo.ml.feature.string.StringFeature;
 import com.oculusinfo.ml.stats.FeatureFrequency;
 import com.oculusinfo.ml.stats.FeatureFrequencyTable;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 /***
@@ -40,44 +41,50 @@ import java.util.LinkedList;
  * @author slangevin
  *
  */
-public class SemanticCentroid implements Centroid<SemanticFeature> {
-	private static final long serialVersionUID = -2797239783660367088L;
+public class SemanticCentroid<K> implements Centroid<SemanticFeature<K>> {
+
 	private String name;
 	private static final int MAX_CENTROID_FEATURES = 5;
 	private static final int MAX_ENTITIES_PER_FEATURE = 3;
 	
-	protected final FeatureFrequencyTable freqTable = new FeatureFrequencyTable();
-	protected final HashMap<String, FeatureFrequencyTable> entityFreqTable = new HashMap<String, FeatureFrequencyTable>();
-	
+	protected final FeatureFrequencyTable<Pair<K,String>> freqTable = new FeatureFrequencyTable<>();
+	protected final HashMap<Pair<K,String>, FeatureFrequencyTable<Pair<K,String>>> entityFreqTable = new LinkedHashMap<>();
+
+
+
 	@Override
-	public void add(SemanticFeature feature) {
-		StringFeature property = new StringFeature(feature.getName());
-		freqTable.add(property);
-		if (!entityFreqTable.containsKey(property.getId())) {
-			entityFreqTable.put(property.getId(), new FeatureFrequencyTable());
+	public void add(SemanticFeature<K> feature) {
+		//StringFeature<K> feature = new StringFeature<K>(feature.getName());
+		freqTable.add(feature);
+
+		//TODO use computeIfAbsent
+		if (!entityFreqTable.containsKey(feature.getId())) {
+			entityFreqTable.put(feature.getId(), new FeatureFrequencyTable());
 		}
 		SemanticFeature sem = new SemanticFeature(feature.getName());
 		sem.setValue(feature.getConcept(), feature.getUri());
-		entityFreqTable.get(property.getId()).add(sem);
+		entityFreqTable.get(feature.getId()).add(sem);
 	}
-	
+
+
+
 	@Override
-	public void remove(SemanticFeature feature) {
-		StringFeature property = new StringFeature(feature.getName());
-		freqTable.decrement(property);
-		if (entityFreqTable.containsKey(property.getId())) {
-			entityFreqTable.get(property.getId()).decrement(feature);
+	public void remove(SemanticFeature<K> feature) {
+		//StringFeature<K> feature = new StringFeature(feature.getName());
+		freqTable.decrement(feature);
+		if (entityFreqTable.containsKey(feature.getId())) {
+			entityFreqTable.get(feature.getId()).decrement(feature);
 		}
 	}
 
 
 	@Override
-	public Collection<SemanticFeature> getAggregatableCentroid () {
-        Collection<SemanticFeature> rawCounts = new LinkedList<SemanticFeature>();
-        
-        Collection<FeatureFrequency> freqs = freqTable.getAll();
-        for (FeatureFrequency freq : freqs) {
-            Collection<FeatureFrequency> topEntities = entityFreqTable.get(freq.feature.getId()).getAll();
+	public Collection<SemanticFeature<K>> getAggregatableCentroid () {
+        Collection<SemanticFeature<K>> rawCounts = new LinkedList<>();
+
+		Collection<FeatureFrequency<Pair<K, String>>> freqs = freqTable.getAll();
+        for (FeatureFrequency<Pair<K, String>> freq : freqs) {
+            Collection<FeatureFrequency<Pair<K, String>>> topEntities = entityFreqTable.get(freq.feature.getId()).getAll();
             for (FeatureFrequency topEntity : topEntities) {
                 rawCounts.add((SemanticFeature) topEntity.feature);
             }
@@ -87,13 +94,13 @@ public class SemanticCentroid implements Centroid<SemanticFeature> {
     }
 
     @Override
-	public SemanticFeature getCentroid() {
-		Collection<SemanticFeature> medoid = new LinkedList<SemanticFeature>();
+	public SemanticFeature<K> getCentroid() {
+		Collection<SemanticFeature<K>> medoid = new LinkedList<>();
 		
 		// semantic medoid is the top N most frequent semantic features
-		Collection<FeatureFrequency> freqs = freqTable.getTopN(MAX_CENTROID_FEATURES);
+		Collection<FeatureFrequency<Pair<K, String>>> freqs = freqTable.getTopN(MAX_CENTROID_FEATURES);
 		for (FeatureFrequency freq : freqs) {
-			Collection<FeatureFrequency> topEntities = entityFreqTable.get(freq.feature.getId()).getTopN(MAX_ENTITIES_PER_FEATURE);
+			Collection<FeatureFrequency<Pair<K, String>>> topEntities = entityFreqTable.get(freq.feature.getId()).getTopN(MAX_ENTITIES_PER_FEATURE);
 			for (FeatureFrequency topEntity : topEntities) {
 				medoid.add((SemanticFeature) topEntity.feature);
 			}
@@ -104,7 +111,7 @@ public class SemanticCentroid implements Centroid<SemanticFeature> {
 	}
 
 	@Override
-	public void setName(String name) {
+	public void setLabel(String name) {
 		this.name = name;
 	}
 
@@ -113,18 +120,16 @@ public class SemanticCentroid implements Centroid<SemanticFeature> {
 		return this.name;
 	}
 
-	@Override
-	public Class<SemanticFeature> getType() {
-		return SemanticFeature.class;
-	}
-	
+
 	public FeatureFrequencyTable getFreqTable() {
 		return this.freqTable;
 	}
-	
+
+	/*
 	public HashMap<String, FeatureFrequencyTable> getEntityFreqTable() {
 		return this.entityFreqTable;
 	}
+	*/
 
 	@Override
 	public void reset() {

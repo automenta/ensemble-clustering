@@ -49,13 +49,13 @@ public class BCubed {
 		double count = 0, total = 0, recall = 0;
 		
 		// first determine how many instances have class label in this cluster
-		for (Instance i : cluster.getMembers()) {
+		for (Instance<String> i : cluster.getMembers()) {
 			if (i.hasClassLabel(label)) count++;
 		}
 		
 		// find out how many instances in total have this class label
 		for (Cluster c : clusters) {
-			for (Instance i : c.getMembers()) {
+			for (Instance<String> i : c.getMembers()) {
 				if (i.hasClassLabel(label)) total++;
 			}
 		}
@@ -75,7 +75,7 @@ public class BCubed {
 	public double precision(String label, Cluster cluster) {
 		double count = 0, precision = 0;
 		
-		for (Instance i : cluster.getMembers()) {
+		for (Instance<String> i : cluster.getMembers()) {
 			if (i.hasClassLabel(label)) count++; 
 		}
 		
@@ -89,7 +89,7 @@ public class BCubed {
 		double p = 0, r = 0;
 		
 		for (Cluster c : clusters) {
-			for (Instance inst : c.getMembers()) {
+			for (Instance<String> inst : c.getMembers()) {
 				p += precision(inst.getClassLabel(), c) ;
 				r += recall(inst.getClassLabel(), c, clusters);
 				num++;

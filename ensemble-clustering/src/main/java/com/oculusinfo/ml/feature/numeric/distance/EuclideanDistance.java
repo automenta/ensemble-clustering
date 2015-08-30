@@ -25,7 +25,6 @@
 package com.oculusinfo.ml.feature.numeric.distance;
 
 import com.oculusinfo.ml.distance.DistanceFunction;
-import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
 
 /***
  * A distance function that computes the Euclidean distance between two VectorFeatures
@@ -33,7 +32,7 @@ import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
  * @author slangevin
  *
  */
-public class EuclideanDistance extends DistanceFunction<NumericVectorFeature>{
+public class EuclideanDistance extends DistanceFunction<double[]>{
 	private static final long serialVersionUID = -1493313434323633636L;
 
 	public EuclideanDistance(double weight) {
@@ -41,16 +40,18 @@ public class EuclideanDistance extends DistanceFunction<NumericVectorFeature>{
 	}
 	
 	@Override
-	public double distance(NumericVectorFeature x, NumericVectorFeature y) {
-		double[] vector1 = x.getValue();
-		double[] vector2 = y.getValue();
-		
+	public double distance(double[] vector1, double[] vector2) {
+
+		final int v1len = vector1.length;
+
 		double d = 0;
-		for (int i = 0; i < vector1.length; i++) {
-			d += Math.pow(vector1[i] - vector2[i], 2);
+
+		for (int i = 0; i < v1len; i++) {
+			final double delta = (vector1[i] - vector2[i]);
+			d += delta*delta;
 		}
 		
 		// return euclidean distance
-		return Math.sqrt( d / (double)vector1.length );
+		return Math.sqrt( d / (double) v1len);
 	}
 }

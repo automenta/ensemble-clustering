@@ -43,17 +43,28 @@ import java.util.UUID;
  * @author slangevin
  *
  */
-public class Instance implements Serializable {
+public class Instance<K, F, V> implements Serializable {
 	private static final long serialVersionUID = -8781788906032267606L;
 	
-	protected String 	id;
+	protected K 	id;
 	protected String	classLabel;
-	protected final Map<String, Feature> features = new LinkedHashMap<String, Feature>();
+	protected final Map<F, Feature<F, V>> features = new LinkedHashMap<>();
 	
-	public Instance() { 
+	/*public Instance() {
 		this(UUID.randomUUID().toString());
+	}*/
+
+//	public Instance() {
+//
+//	}
+
+	public static Instance<String, String, String> newRandomUUIDString() {
+		return new Instance(UUID.randomUUID().toString());
 	}
-	
+	public static Instance<UUID, String, String> newRandomUUID() {
+		return new Instance(UUID.randomUUID());
+	}
+
 	/***
 	 * Constructor to specify your own id's
 	 * 
@@ -61,9 +72,11 @@ public class Instance implements Serializable {
 	 * 
 	 * @param id
 	 */
-	public Instance(String id) {
+	public Instance(K id) {
 		this.id = id;
 	}
+
+
 	
 	/***
 	 * Return whether this Instance has the specified label
@@ -95,17 +108,17 @@ public class Instance implements Serializable {
 	 * The unique id for this Instance
 	 * @return the Instance id
 	 */
-	public String getId() {
+	public K getId() {
 		return id;
 	}
 	
-	/***
-	 * Set the unique Instance id
-	 * @param id id of Instance
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+//	/***
+//	 * Set the unique Instance id
+//	 * @param id id of Instance
+//	 */
+//	public void setId(K id) {
+//		this.id = id;
+//	}
 	
 	@Override
 	public int hashCode() {
@@ -132,7 +145,7 @@ public class Instance implements Serializable {
 	 * 
 	 * @param feature feature to add to the Instance
 	 */
-	public void addFeature(Feature feature) {
+	public void add(Feature<F, V> feature) {
 		features.put(feature.getId(), feature);
 	}
 
@@ -143,9 +156,9 @@ public class Instance implements Serializable {
 	 * 
 	 * @param features features to add to the Instance
 	 */
-	public void addFeatures(Collection<? extends Feature> features) {
-		for (Feature f : features) {
-			addFeature(f);
+	public void addFeatures(Collection<? extends Feature<F, V>> features) {
+		for (Feature<F,V> f : features) {
+			add(f);
 		}
 	}
 
@@ -154,7 +167,7 @@ public class Instance implements Serializable {
 	 * @param featureName featureName to check
 	 * @return true if this Instance contain a Feature with name
 	 */
-	public boolean containsFeature(String featureName) {
+	public boolean containsFeature(F featureName) {
 		return features.containsKey(featureName);
 	}
 	
@@ -163,7 +176,7 @@ public class Instance implements Serializable {
 	 * @param featureName name of the Feature
 	 * @return the Feature with the specified name or null if the Instance don't have a matching Feature
 	 */
-	public Feature getFeature(String featureName) {
+	public Feature<F, V> getFeature(F featureName) {
 		return features.get(featureName);
 	}
 
@@ -181,7 +194,7 @@ public class Instance implements Serializable {
 	 * @return collection of Features
 	 */
 	@JsonIgnore
-	public Collection<Feature> getAllFeatures() {
+	public Collection<Feature<F,V>> getAllFeatures() {
 		return features.values();
 	}
 
@@ -189,7 +202,7 @@ public class Instance implements Serializable {
 	 * Return a map of the Features associated with this Instance keyed by Feature name
 	 * @return a Map of Features
 	 */
-	public Map<String, Feature> getFeatures() {
+	public Map<F, Feature<F,V>> getFeatures() {
 		return features;
 	}
 
@@ -197,7 +210,7 @@ public class Instance implements Serializable {
 	 * Add all Features in a Map to the Instance whether the Map is keyed by Feature name
 	 * @param feature Map to add
 	 */
-	public void setFeatures(Map<String, Feature> features) {
+	public void setFeatures(Map<F, Feature<F,V>> features) {
 		this.features.putAll(features);
 	}
 
@@ -205,7 +218,7 @@ public class Instance implements Serializable {
 	 * Remove the Feature with the specified name from the Instance
 	 * @param name of the Feature to remove
 	 */
-	public void removeFeature(String featureName) {	
+	public void removeFeature(F featureName) {
 		features.remove(featureName);
 	}
 
@@ -222,5 +235,9 @@ public class Instance implements Serializable {
 	 */
 	public int numFeatures() {
 		return features.size();
-	}	
+	}
+
+	public V getValue(F feature) {
+		return getFeature(feature).getValue();
+	}
 }

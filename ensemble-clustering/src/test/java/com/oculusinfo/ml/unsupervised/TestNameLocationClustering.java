@@ -37,29 +37,30 @@ import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
 import com.oculusinfo.ml.unsupervised.cluster.kmeans.KMeans;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class TestNameLocationClustering {
 	
 	public static void main(String[] args) {
-		DataSet ds = new DataSet();
+		DataSet<UUID> ds = new DataSet();
 		
 		String[] tokens = {"alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "romeo", "sierra", "tango", "whiskey"};
 		
 		Random rnd = new Random();
 		for (int i=0; i < 100000; i++) {
 			// create a new data instance
-			Instance inst = new Instance();
+			final Instance<UUID> inst = Instance.newRandomUUID();
 			
 			// add name feature to the instance
-			StringFeature name = new StringFeature("name");
+					StringFeature name = new StringFeature("name");
 			name.setValue( tokens[rnd.nextInt(tokens.length)] + " " + tokens[rnd.nextInt(tokens.length)]);
-			inst.addFeature(name);
+			inst.add(name);
 			
 			// add geo spatial feature to the instance
 			GeoSpatialFeature geo = new GeoSpatialFeature("location");
 			geo.setLatitude(rnd.nextDouble() * 180 - 90);
 			geo.setLongitude(rnd.nextDouble() * 360 - 180);
-			inst.addFeature(geo);
+			inst.add(geo);
 		
 			// add the instance to the dataset
 			ds.add(inst);

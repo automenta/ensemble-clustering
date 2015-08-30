@@ -35,7 +35,7 @@ import com.oculusinfo.ml.stats.FeatureFrequency;
  * @author slangevin
  *
  */
-public class ExactTokenMatchDistance extends DistanceFunction<BagOfWordsFeature> {
+public class ExactTokenMatchDistance extends DistanceFunction<BagOfWordsFeature<String>> {
 	private static final long serialVersionUID = -3651531184290382230L;
 
 	public ExactTokenMatchDistance() {
@@ -47,20 +47,20 @@ public class ExactTokenMatchDistance extends DistanceFunction<BagOfWordsFeature>
 	}
 	
 	@Override
-	public double distance(BagOfWordsFeature x, BagOfWordsFeature y) {
+	public double distance(BagOfWordsFeature<String> x, BagOfWordsFeature<String> y) {
 		double dist = 0;
 		int m = x.getValues().size();
 		int n = y.getValues().size();
 		double norm = Math.max(m, n);
 		
 		// set a to be the largest nominal list
-		BagOfWordsFeature a = x, b = y;
+		BagOfWordsFeature<String> a = x, b = y;
 		if (m < n) {
 			a = y;
 			b = x;
 		}
 		
-		for (FeatureFrequency xf : a.getValues()) {
+		for (FeatureFrequency<String> xf : a.getValues()) {
 			if (b.getCount(xf.feature.getName()) == null) {
 				dist += 1;
 			}

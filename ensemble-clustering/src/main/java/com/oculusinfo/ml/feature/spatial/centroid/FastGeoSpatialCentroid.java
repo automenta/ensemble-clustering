@@ -25,6 +25,7 @@
 package com.oculusinfo.ml.feature.spatial.centroid;
 
 import com.oculusinfo.ml.centroid.Centroid;
+import com.oculusinfo.ml.feature.Feature;
 import com.oculusinfo.ml.feature.spatial.GeoSpatialFeature;
 
 import java.util.Collection;
@@ -36,71 +37,69 @@ import java.util.Collections;
  * @author slangevin
  *
  */
-public class FastGeoSpatialCentroid implements Centroid<GeoSpatialFeature> {
-    private static final long serialVersionUID = 538283509674357135L;
+public class FastGeoSpatialCentroid<F> implements Centroid<F,double[]> {
 
-    private String name;
+    private F name;
 	private double weight = 0.0;
-	private double clat = 0, clon;
-	
+
+	public final double[] latlon = new double[2];
+
 	@Override
-	public void add(GeoSpatialFeature feature) {
+	public void setName(F name) {
+		this.name = name;
+	}
+
+	@Override
+	public void add(Feature<F,double[]> feature) {
 	    double addedWeight = feature.getWeight();
 	    double newWeight = weight + addedWeight;
 
 	    // incrementally revise the centroid coordinates
-		clat = (clat * weight + feature.getLatitude() * addedWeight) / newWeight;  
-		clon = (clon * weight + feature.getLongitude() * addedWeight) / newWeight;
+		latlon[0] = (latlon[0] * weight + feature.getValue()[0] * addedWeight) / newWeight;
+		latlon[1] = (latlon[1] * weight + feature.getValue()[1] * addedWeight) / newWeight;
+
 		weight = newWeight;
 	}
 	
 	@Override
-	public void remove(GeoSpatialFeature feature) {
+	public void remove(Feature<F,double[]> feature) {
 	    double removedWeight = feature.getWeight();
 	    double newWeight = weight - removedWeight;
 
 	    if (weight <= 0.0) {
 	        System.out.println("Attempt to remove from empty GeoSpatialCentroid");
 	    } else {
-	        clat = (clat * weight - feature.getLatitude() * removedWeight) / newWeight;
-	        clon = (clon * weight - feature.getLongitude() * removedWeight) / newWeight;
+	        latlon[0] = (latlon[0] * weight - feature.getValue()[0] * removedWeight) / newWeight;
+			latlon[1] = (latlon[1] * weight - feature.getValue()[1] * removedWeight) / newWeight;
 	        weight = newWeight;
 	    }
 	}
 
 	@Override
-	public Collection<GeoSpatialFeature> getAggregatableCentroid () {
+	public Collection<Feature<F,double[]>> getAggregatableCentroid () {
 	    return Collections.singleton(getCentroid());
 	}
 
 	@Override
-	public GeoSpatialFeature getCentroid() {
+	public GeoSpatialFeature<F> getCentroid() {
+
 		// create the centroid geospatial feature set
-		GeoSpatialFeature centroid = new GeoSpatialFeature(name);
-		centroid.setValue( (clat), (clon) );  // return average lat, lon - very crude method of determining centroid for geo
+		GeoSpatialFeature<F> centroid = new GeoSpatialFeature(name);
+		centroid.setValue( latlon[0], latlon[1] ); //(clat), (clon) );  // return average lat, lon - very crude method of determining centroid for geo
 		centroid.setWeight(weight);
 		return centroid;
 	}
 
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	@Override
-	public String getName() {
+	public F getName() {
 		return this.name;
 	}
 
-	@Override
-	public Class<GeoSpatialFeature> getType() {
-		return GeoSpatialFeature.class;
-	}
 
 	@Override
 	public void reset() {
 		weight = 0;
-		clat = 0;
-		clon = 0;
+		latlon[0] = latlon[1] = 0;
 	}
 }

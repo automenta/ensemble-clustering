@@ -34,17 +34,17 @@ import java.util.List;
  * @author slangevin
  *
  */
-public class InMemoryClusterResult implements ClusterResult {
-	private static final long serialVersionUID = -485649795889971226L;
+public class InMemoryClusterResult<K,V> implements ClusterResult<K,V> {
+
 	
-	final List<Cluster> clusters = new LinkedList<Cluster>();
+	final List<Cluster<K,V>> clusters = new LinkedList<>();
 	
-	public InMemoryClusterResult(List<Cluster> clusters) {
+	public InMemoryClusterResult(List<Cluster<K,V>> clusters) {
 		this.clusters.addAll(clusters);
 	}
 	
 	@Override
-	public Iterator<Cluster> iterator() {
+	public Iterator<Cluster<K,V>> iterator() {
 		return clusters.iterator();
 	}
 

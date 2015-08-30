@@ -55,7 +55,7 @@ public class StringTools {
     	String[] tokens = s.split("\\s+");
     	
     	// sort tokens and combine into new string
-    	TreeSet<String> set = new TreeSet<String>();
+    	TreeSet<String> set = new TreeSet<>();
         Collections.addAll(set, tokens);
         
         StringBuffer fingerPrint = new StringBuffer();

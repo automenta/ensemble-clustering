@@ -34,7 +34,7 @@ import com.oculusinfo.ml.feature.Feature;
  * @author slangevin
  *
  */
-public class StringFeature extends Feature {
+public class StringFeature<K> extends Feature<K, Object> {
 	private static final long serialVersionUID = -2290284204885879224L;
 	private String value;
 	
@@ -42,7 +42,7 @@ public class StringFeature extends Feature {
 		super();
 	}
 	
-	public StringFeature(String name) {
+	public StringFeature(K name) {
 		super(name);
 	}
 	
@@ -56,6 +56,6 @@ public class StringFeature extends Feature {
 	
 	@Override
 	public String toString() {
-		return this.getName() + ':' + value;
+		return this.getName().toString() + ':' + value;
 	}
 }

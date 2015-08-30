@@ -24,6 +24,8 @@
  */
 package com.oculusinfo.ml.feature.semantic;
 
+import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.tuple.Tuples;
 import com.oculusinfo.ml.feature.Feature;
 
 /***
@@ -39,8 +41,9 @@ import com.oculusinfo.ml.feature.Feature;
  * @author slangevin
  *
  */
-public class SemanticFeature extends Feature {
-	private static final long serialVersionUID = -6524985038597553461L;
+public class SemanticFeature<K> extends Feature<Pair<K,String>, Object> {
+
+	private K id;
 	private String concept;
 	private String uri;
 	private String label;
@@ -49,18 +52,23 @@ public class SemanticFeature extends Feature {
 		super();
 	}
 	
-	public SemanticFeature(String name) {
-		super(name);
+	public SemanticFeature(K name) {
+		super();
+		this.id = name;
+		setValue(null, null);
 	}
 	
 	public void setValue(String concept, String uri) {
-		this.concept = concept;
 		this.uri = uri;
+		if (concept.equals(this.concept))
+			return;
+
+		this.concept = concept;
+		setName(Tuples.pair(id, concept));
 	}
 	
 	public void setValue(String concept, String uri, String label) {
-		this.concept = concept;
-		this.uri = uri;
+		setValue(concept, uri);
 		this.label = label;
 	}
 
@@ -69,7 +77,10 @@ public class SemanticFeature extends Feature {
 	}
 	
 	public void setConcept(String concept) {
-		this.concept = concept;
+		if (concept.equals(this.concept))
+			return;
+
+		setValue(concept, uri);
 	}
 	
 	public String getUri() {
@@ -101,14 +112,5 @@ public class SemanticFeature extends Feature {
 		}
 		return output.toString();
 	}
-	
-	@Override
-	public String getId() {
-		return (name + ':' + concept); // + ":" + uri);
-	}
 
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
-	}
 }

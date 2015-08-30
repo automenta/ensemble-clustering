@@ -34,7 +34,7 @@ import com.oculusinfo.ml.stats.FeatureFrequency;
  * @author slangevin
  *
  */
-public class CosineDistance extends DistanceFunction<BagOfWordsFeature> {
+public class CosineDistance<K> extends DistanceFunction<BagOfWordsFeature<K>> {
 	private static final long serialVersionUID = -635994591459075095L;
 
 	public CosineDistance() {
@@ -46,12 +46,12 @@ public class CosineDistance extends DistanceFunction<BagOfWordsFeature> {
 	}
 	
 	@Override
-	public double distance(BagOfWordsFeature x, BagOfWordsFeature y) {
+	public double distance(BagOfWordsFeature<K> x, BagOfWordsFeature<K> y) {
 		double dotprod = 0, xlength = 0, ylength = 0;
 		
-		for (FeatureFrequency xf : x.getValues()) {
+		for (FeatureFrequency<K> xf : x.getValues()) {
 			xlength += xf.frequency * xf.frequency;
-			FeatureFrequency yf = y.getCount(xf.feature.getName());
+			FeatureFrequency<K>  yf = y.getCount(xf.feature.getName());
 			if (yf != null) dotprod += xf.frequency * yf.frequency;
 		}
 		for (FeatureFrequency yf : y.getValues()) {

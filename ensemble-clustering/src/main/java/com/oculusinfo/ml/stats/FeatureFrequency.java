@@ -28,25 +28,24 @@ import com.oculusinfo.ml.feature.Feature;
 
 import java.io.Serializable;
 
-public class FeatureFrequency implements Serializable {
-	private static final long serialVersionUID = -3008472634828604901L;
+public class FeatureFrequency<K> implements Serializable {
 	public int frequency = 0;
-	public Feature feature;
-	
-	public FeatureFrequency() { }
-	
-	public FeatureFrequency(Feature feature) {
+	public final Feature<K, Object> feature;
+
+	public FeatureFrequency(Feature<K, Object> feature) {
 		this.feature = feature;
 		frequency = 1;
 	}
 	
-	public Feature getFeature() {
+	public Feature<K, Object> getFeature() {
 		return feature;
 	}
-	
+
+	/*
 	public void setFeature(Feature feature) {
 		this.feature = feature;
 	}
+	*/
 	
 	public int getFrequency() {
 		return frequency;

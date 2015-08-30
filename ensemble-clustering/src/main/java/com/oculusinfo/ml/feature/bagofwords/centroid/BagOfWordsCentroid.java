@@ -24,6 +24,7 @@
  */
 package com.oculusinfo.ml.feature.bagofwords.centroid;
 
+import com.gs.collections.api.bag.Bag;
 import com.oculusinfo.ml.centroid.Centroid;
 import com.oculusinfo.ml.feature.bagofwords.BagOfWordsFeature;
 import com.oculusinfo.ml.stats.FeatureFrequency;
@@ -38,28 +39,30 @@ import java.util.Collections;
  * @author slangevin
  *
  */
-public class BagOfWordsCentroid implements Centroid<BagOfWordsFeature> {
+public class BagOfWordsCentroid<F> implements Centroid<F,String> {
 	private static final long serialVersionUID = -5723416814427314073L;
 	private String name;
 	private static final int MAX_CENTROID_FEATURES = 10;
-	protected final FeatureFrequencyTable freqTable = new FeatureFrequencyTable();
-	
+	protected final FeatureFrequencyTable<String> freqTable = new FeatureFrequencyTable();
+
+	ObjectIntHashMap<String> freqTable;
+
 	@Override
-	public void add(BagOfWordsFeature feature) {
-		for (FeatureFrequency nom : feature.getValues()) {
+	public void add(String feature) {
+		for (FeatureFrequency<String> nom : feature.getValues()) {
 			freqTable.add(nom);
 		}
 	}
 	
 	@Override
-	public void remove(BagOfWordsFeature feature) {
-		for (FeatureFrequency nom : feature.getValues()) {
+	public void remove(BagOfWordsFeature<String> feature) {
+		for (FeatureFrequency<String> nom : feature.getValues()) {
 			freqTable.decrementBy(nom.feature, nom.frequency);
 		}
 	}
 
 	@Override
-	public Collection<BagOfWordsFeature> getAggregatableCentroid() {
+	public Collection<BagOfWordsFeature<String>> getAggregatableCentroid() {
         BagOfWordsFeature rawCounts = new BagOfWordsFeature(name);
         rawCounts.setFreqTable(freqTable);
         return Collections.singleton(rawCounts);
@@ -68,7 +71,7 @@ public class BagOfWordsCentroid implements Centroid<BagOfWordsFeature> {
     @Override
 	public BagOfWordsFeature getCentroid() {
 		// centroid is the top N most frequent words
-		Collection<FeatureFrequency> freqs = freqTable.getTopN(MAX_CENTROID_FEATURES);
+		Collection<FeatureFrequency<String>> freqs = freqTable.getTopN(MAX_CENTROID_FEATURES);
 		BagOfWordsFeature medoid = new BagOfWordsFeature(name);
 		for (FeatureFrequency freq : freqs) {
 			medoid.setCount(freq);
@@ -86,11 +89,7 @@ public class BagOfWordsCentroid implements Centroid<BagOfWordsFeature> {
 		return this.name;
 	}
 
-	@Override
-	public Class<BagOfWordsFeature> getType() {
-		return BagOfWordsFeature.class;
-	}
-	
+
 	public FeatureFrequencyTable getFreqTable() {
 		return this.freqTable;
 	}

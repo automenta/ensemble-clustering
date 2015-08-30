@@ -51,8 +51,8 @@ public class BCubedHierarchical {
 		return f;
 	}
 	
-	private boolean contains(Instance inst, Cluster c) {
-		for (Instance i : c.getMembers()) {
+	private boolean contains(Instance<String> inst, Cluster c) {
+		for (Instance<String> i : c.getMembers()) {
 			if (i instanceof Cluster) {
 				if ( contains(inst, (Cluster)i) ) return true;
 			}
@@ -61,17 +61,17 @@ public class BCubedHierarchical {
 		return false;
 	}
 	
-	private Collection<Cluster> getClusters(Instance inst, Collection<? extends Instance> clusters) {
-		Collection<Cluster> iclusters = new LinkedList<Cluster>();
+	private Collection<Cluster> getClusters(Instance<String> inst, Collection<? extends Instance<String>> clusters) {
+		Collection<Cluster> iclusters = new LinkedList<>();
 		
-		for (Instance i : clusters) {
+		for (Instance<String> i : clusters) {
 			Cluster c = (Cluster)i;
 			if (contains(inst, c)) iclusters.add(c);
 		}
 		return iclusters;
 	}
 	
-	public double avePrecision(Instance inst, Collection<Cluster> clusters) {
+	public double avePrecision(Instance<String> inst, Collection<Cluster> clusters) {
 		double p = 0;
 		
 		Collection<Cluster> iclusters = getClusters(inst, clusters);
@@ -82,7 +82,7 @@ public class BCubedHierarchical {
 		return (p / iclusters.size());
 	}
 	
-	public double aveRecall(Instance inst, Collection<Cluster> clusters) {
+	public double aveRecall(Instance<String> inst, Collection<Cluster> clusters) {
 		double r = 0, labelCount = labelCount(inst.getClassLabel(), clusters);
 		
 		Collection<Cluster> iclusters = getClusters(inst, clusters);
@@ -95,10 +95,10 @@ public class BCubedHierarchical {
 		return (r / iclusters.size());
 	}
 	
-	public int instanceCount(Collection<? extends Instance> group) {
+	public int instanceCount(Collection<? extends Instance<String>> group) {
 		int count = 0;
 		
-		for (Instance i : group) {
+		for (Instance<String> i : group) {
 			if (i instanceof Cluster) {
 				count += instanceCount(((Cluster)i).getMembers());
 			}
@@ -109,10 +109,10 @@ public class BCubedHierarchical {
 		return count;
 	}
 	
-	public int labelCount(String label, Collection<? extends Instance> group) {
+	public int labelCount(String label, Collection<? extends Instance<String>> group) {
 		int count = 0;
 		
-		for (Instance i : group) {
+		for (Instance<String> i : group) {
 			if (i instanceof Cluster) {
 				count += labelCount(label, ((Cluster)i).getMembers());
 			}
@@ -123,10 +123,10 @@ public class BCubedHierarchical {
 		return count;
 	}
 
-	public double validate(DataSet ds, Collection<Cluster> clusters) {
+	public double validate(DataSet<String> ds, Collection<Cluster> clusters) {
 		double p = 0, r = 0, count = ds.size();
 		
-		for (Instance inst : ds) {
+		for (Instance<String> inst : ds) {
 			p += avePrecision(inst, clusters);
 			r += aveRecall(inst, clusters);
 		}

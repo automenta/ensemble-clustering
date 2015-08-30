@@ -30,9 +30,10 @@ import java.io.Serializable;
 import java.util.*;
 
 
-public class FeatureTable implements Serializable {
+public class FeatureTable<K> implements Serializable {
 	private static final long serialVersionUID = -5842770909462107078L;
-	private Map<String, List<Feature>> table = new HashMap<String, List<Feature>>();
+
+	public final Map<K, List<Feature<K, Object>>> table = new HashMap<>();
 	
 	public FeatureTable() { super(); }
 	
@@ -40,54 +41,56 @@ public class FeatureTable implements Serializable {
 		return table.containsKey(name);
 	}
 	
-	public void addFeature(Feature f) {
+	public void addFeature(Feature<K, Object> f) {
 		//TODO use Map.computeIfAbsent for this entire method
 		if (table.containsKey(f.getName()) == false) {
-			table.put(f.getName(), new LinkedList<Feature>());
+			table.put(f.getName(), new LinkedList<>());
 		}
-		Collection<Feature> featureList = table.get(f.getName());
+		Collection<Feature<K, Object>> featureList = table.get(f.getName());
 		featureList.add(f);
 	}
 	
-	public void addFeatures(Collection<Feature> features) {
-		for (Feature f : features) {
+	public void addFeatures(Collection<Feature<K, Object>> features) {
+		for (Feature<K, Object> f : features) {
 			addFeature(f);
 		}
 	}
 	
-	public void addFeatures(FeatureTable copyTable) {
-		for (Collection<Feature> list : copyTable.getFeatures()) {
+	public void addFeatures(FeatureTable<K> copyTable) {
+		for (Collection<Feature<K, Object>> list : copyTable.getFeatures()) {
 			addFeatures(list);
 		}
 	}
 	
-	public List<Feature> removeFeature(String name) {
+	public List<Feature<K, Object>> removeFeature(String name) {
 		return table.remove(name);
 	}
 	
-	public List<Feature> getFeature(String name) {
+	public List<Feature<K, Object>> getFeature(String name) {
 		return table.get(name);
 	}
 	
 	@JsonIgnore
-	public Collection<String> getFeatureNames() {
+	public Collection<K> getFeatureNames() {
 		return table.keySet();
 	}
 	
-	public Map<String, List<Feature>> getTable() {
+	public Map<K, List<Feature<K, Object>>> getTable() {
 		return table;
 	}
-	
-	public void setTable(Map<String, List<Feature>> table) {
+
+	/*
+	public void setTable(Map<K, List<Feature<K>>> table) {
 		this.table = table;
 	}
-	
+	*/
+
 	public int numFeatures() {
 		return table.size();
 	}
 	
 	@JsonIgnore
-	public Collection<List<Feature>> getFeatures() {
+	public Collection<List<Feature<K, Object>>> getFeatures() {
 		return table.values();
 	}
 	
@@ -98,7 +101,7 @@ public class FeatureTable implements Serializable {
 	
 	public String toString(String prefix) {
 		StringBuilder str = new StringBuilder();
-		for (Collection<Feature> features : table.values()) {
+		for (Collection<Feature<K, Object>> features : table.values()) {
 			int i = 1;
 			for (Feature f : features) {
 				str.append(prefix).append(f);

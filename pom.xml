@@ -72,6 +72,5 @@
   
   <modules>
   	<module>ensemble-clustering</module>
-  	<module>ensemble-clustering-spark</module>
   </modules>
 </project>

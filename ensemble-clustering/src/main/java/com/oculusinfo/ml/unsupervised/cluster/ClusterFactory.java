@@ -26,21 +26,20 @@ package com.oculusinfo.ml.unsupervised.cluster;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.UUID;
 
 
-public class ClusterFactory implements Serializable {
+abstract public class ClusterFactory<K,F,V> implements Serializable {
 	private static final long serialVersionUID = -5094018550295526175L;
 	
-	private final boolean onlineUpdate;
-	private final Map<String, FeatureTypeDefinition> featureTypeDefs;
+	public final boolean onlineUpdate;
+	public final Map<F, FeatureValueDefinition<F,V>> featureTypeDefs;
 	
-	public ClusterFactory(Map<String, FeatureTypeDefinition> featureTypeDefs, boolean onlineUpdate) {
+	public ClusterFactory(Map<F, FeatureValueDefinition<F,V>> featureTypeDefs, boolean onlineUpdate) {
 		this.onlineUpdate = onlineUpdate;
 		this.featureTypeDefs = featureTypeDefs;
 	}
-	
-	public Cluster create() {
-		return (new Cluster(UUID.randomUUID().toString(), featureTypeDefs.values(), onlineUpdate));
-	}
+
+	abstract public Cluster<K,F,V> create();
+
+
 }

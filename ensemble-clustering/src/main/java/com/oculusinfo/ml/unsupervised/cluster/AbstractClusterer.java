@@ -46,7 +46,7 @@ import java.util.concurrent.*;
  * @author slangevin
  *
  */
-public abstract class AbstractClusterer extends BaseClusterer {
+public abstract class AbstractClusterer<K,F,V> extends BaseClusterer<K,F,V> {
 	protected final static int DEFAULT_THREAD_POOL = Runtime.getRuntime().availableProcessors();
 
 	protected final boolean penalizeMissingFeatures;
@@ -56,7 +56,10 @@ public abstract class AbstractClusterer extends BaseClusterer {
 	
 	protected static final Logger log = LoggerFactory.getLogger("com.oculusinfo");
 	protected ExecutorService exec; // = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL); //.newSingleThreadExecutor();;
-	
+
+	//increase this to increase speed and decrease accuracy
+	double minDistFunctionWeightToCalculate = 0.00001;
+
 	@Override
 	public void init() {
 		exec = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL, new MyThreadFactory()); //.newSingleThreadExecutor();
@@ -117,7 +120,7 @@ public abstract class AbstractClusterer extends BaseClusterer {
 	 * @param bestScore is the current best score
 	 * @return true if candidate is a better cluster for inst than best
 	 */
-	protected abstract boolean isCandidate(Instance inst, Cluster candidate, double score, Cluster best, double bestScore);
+	protected abstract boolean isCandidate(Instance<K,F,V> inst, Cluster candidate, double score, Cluster best, double bestScore);
 	
 	public AbstractClusterer() {
 		this(false, false, true);
@@ -152,23 +155,23 @@ public abstract class AbstractClusterer extends BaseClusterer {
 	}
 	
 	@Override
-	public ClusterResult doIncrementalCluster(DataSet ds, List<Cluster> clusters) {
+	public ClusterResult doIncrementalCluster(DataSet<K,F,V> ds, List<Cluster<K,F,V>> clusters) {
 		return doCluster(ds, clusters);
 	}
 	
 	@Override
-	public ClusterResult doCluster(DataSet ds) {
-		return doCluster(ds, new LinkedList<Cluster>());
+	public ClusterResult doCluster(DataSet<K,F,V> ds) {
+		return doCluster(ds, new LinkedList<>());
 	}
 	
-	private List<List<? extends Instance>> createBlocks(List<? extends Instance> clusters, int blocksize) {
-		List<List<? extends Instance>> blocks = new LinkedList<List<? extends Instance>>();
+	private List<List<? extends Instance<K,F,V>>> createBlocks(List<? extends Instance<K,F,V>> clusters, int blocksize) {
+		List<List<? extends Instance<K,F,V>>> blocks = new LinkedList<>();
 		
 		int sIdx = 0;
 		int eIdx = 0;
 		while (eIdx < clusters.size()) {
 			eIdx = Math.min(sIdx+blocksize, clusters.size());
-			blocks.add(new LinkedList<Instance>(clusters.subList(sIdx, eIdx)));
+			blocks.add(new LinkedList<>(clusters.subList(sIdx, eIdx)));
 			sIdx = eIdx;
 		}
 		return blocks;
@@ -181,21 +184,21 @@ public abstract class AbstractClusterer extends BaseClusterer {
 	 * using the executor service. The cluster that is the best candidate for the inst is returned.
 	 * 
 	 * @param inst is the instance being considered
-	 * @param clusters is a collection of clusters to search
+	 * @param clusterBlocks is a collection of clusters to search
 	 * @return the best cluster
 	 */
-	public DistanceResult bestCluster(final Instance inst, final List<List<? extends Instance>> clusterBlocks) {
+	public DistanceResult bestCluster(final Instance<K,F,V> inst, final List<List<? extends Instance<K,F,V>>> clusterBlocks) {
 		double bestScore 		= Double.MAX_VALUE;
 		Cluster bestCluster 	= null;
-		CompletionService<DistanceResult> batch = new ExecutorCompletionService<DistanceResult>(getExecutor());
+		CompletionService<DistanceResult> batch = new ExecutorCompletionService<>(getExecutor());
 		
 	
-		for (final List<? extends Instance> clusters : clusterBlocks) {
+		for (final List<? extends Instance<K,F,V>> clusters : clusterBlocks) {
 			batch.submit(() -> {
                 double bestDist = Double.MAX_VALUE;
-                Instance bestMatch = null;
+                Instance<K,F,V> bestMatch = null;
 
-                for (Instance c : clusters) {
+                for (Instance<K,F,V> c : clusters) {
                     double d = distance(inst, c);
                     if (d < bestDist) {
                         bestDist = d;
@@ -231,17 +234,17 @@ public abstract class AbstractClusterer extends BaseClusterer {
 	 * @param clusters is a collection of clusters to modify
 	 * @return a collection of modified clusters
 	 */
-	protected ClusterResult doCluster(DataSet ds, List<Cluster> clusters) {
+	protected ClusterResult<K,V> doCluster(DataSet<K,F,V> ds, List<Cluster<K,F,V>> clusters) {
 		double start = System.currentTimeMillis();
 		
 		// if the clusterer hasn't been initially manually then init it now
 		if (exec == null) init();
 		
-		LinkedHashSet<Cluster> modified = new LinkedHashSet<Cluster>();
+		LinkedHashSet<Cluster> modified = new LinkedHashSet<>();
 		
-		for (Instance inst : ds) {
+		for (Instance<K,F,V> inst : ds) {
 			// Process in batches of blocks of 100 clusters
-			List<List<? extends Instance>> blocks = createBlocks(clusters, 100);
+			List<List<? extends Instance<K,F,V>>> blocks = createBlocks(clusters, 100);
 			
 //			double bestStart = System.currentTimeMillis();
 			Cluster bestCluster = bestCluster(inst, blocks).c;
@@ -270,17 +273,22 @@ public abstract class AbstractClusterer extends BaseClusterer {
 		double clusterTime = System.currentTimeMillis() - start;
 		log.debug("Clustering time (s): {}", clusterTime / 1000);
 		
-		return new InMemoryClusterResult(new LinkedList<Cluster>(modified));
+		return new InMemoryClusterResult(new LinkedList<>(modified));
 	}
-	
+
+	protected abstract Cluster createCluster();
+
+
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public double distance(Instance inst1, Instance inst2) {
+	public double distance(Instance<K,F,V> inst1, Instance<K,F,V> inst2) {
 		double totalDist = 0; 
 
 		try {
-			for (FeatureTypeDefinition typedef : this.getTypeDefs()) {
-				if (typedef.distFunc.getWeight() < 0.00001) continue;  // skip if weight is near zero
+			for (FeatureValueDefinition<F,V> typedef : this.getTypeDefs()) {
+
+				if (typedef.distFunc.getWeight() < minDistFunctionWeightToCalculate) continue;  // skip if weight is near zero
 				
 				Feature f1 = inst1.getFeature(typedef.featureName);
 				Feature f2 = inst2.getFeature(typedef.featureName);

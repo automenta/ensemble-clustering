@@ -39,7 +39,7 @@ import java.util.Collection;
  * @author slangevin
  *
  */
-public class EditDistance extends DistanceFunction<BagOfWordsFeature> {
+public class EditDistance extends DistanceFunction<BagOfWordsFeature<String>> {
 	private static final long serialVersionUID = -1270784860823146795L;
 
 	public EditDistance() {
@@ -54,22 +54,24 @@ public class EditDistance extends DistanceFunction<BagOfWordsFeature> {
 	public double distance(BagOfWordsFeature x, BagOfWordsFeature y) {
 		double dist = 0;
 		
-		Collection<FeatureFrequency> xWords = x.getValues();
-		Collection<FeatureFrequency> yWords = y.getValues();
+		Collection<FeatureFrequency<String>>
+			xWords = x.getValues(),
+			yWords = y.getValues();
+
 		int m = xWords.size();
 		int n = yWords.size();
 		double norm = Math.max(m, n);
 		
 		// set a to be the largest nominal list
-		Collection<FeatureFrequency> a = xWords, b = yWords;
+		Collection<FeatureFrequency<String>> a = xWords, b = yWords;
 		if (m < n) {
 			a = yWords;
 			b = xWords;
 		}
 		
-		for (FeatureFrequency xf : a) {
+		for (FeatureFrequency<String> xf : a) {
 			double best = 1.0;
-			for (FeatureFrequency yf : b) {
+			for (FeatureFrequency<String> yf : b) {
 				double d = getNormLevenshteinDistance(xf.feature.getName(), yf.feature.getName());
 				if (d < best) best = d;
 			}

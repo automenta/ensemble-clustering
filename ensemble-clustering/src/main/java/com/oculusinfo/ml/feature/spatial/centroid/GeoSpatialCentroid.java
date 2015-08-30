@@ -36,14 +36,13 @@ import java.util.Collections;
  * @author slangevin
  *
  */
-public class GeoSpatialCentroid implements Centroid<GeoSpatialFeature> {
-	private static final long serialVersionUID = -5695057485949376693L;
-	private String name;
+public class GeoSpatialCentroid<K> implements Centroid<GeoSpatialFeature<K>> {
+	private String label;
 	private double weight = 0.0;
 	private double cx = 0, cy = 0, cz = 0;
 	
 	@Override
-	public void add(GeoSpatialFeature feature) {
+	public void add(GeoSpatialFeature<K> feature) {
 	    double addedWeight = feature.getWeight();
 		double x = 0, y = 0, z = 0, lat = 0, lon = 0;
 		
@@ -65,7 +64,7 @@ public class GeoSpatialCentroid implements Centroid<GeoSpatialFeature> {
 	}
 	
 	@Override
-	public void remove(GeoSpatialFeature feature) {
+	public void remove(GeoSpatialFeature<K> feature) {
 	    double removedWeight = feature.getWeight();
 		double x = 0, y = 0, z = 0, lat = 0, lon = 0;
 		
@@ -88,12 +87,12 @@ public class GeoSpatialCentroid implements Centroid<GeoSpatialFeature> {
 
 
     @Override
-    public Collection<GeoSpatialFeature> getAggregatableCentroid () {
+    public Collection<GeoSpatialFeature<K>> getAggregatableCentroid () {
         return Collections.singleton(getCentroid());
     }
 
 	@Override
-	public GeoSpatialFeature getCentroid() {
+	public GeoSpatialFeature<K> getCentroid() {
 		double lat = 0, lon = 0, hyp = 0;
 		
 		// calculate average x,y,z coords
@@ -105,7 +104,7 @@ public class GeoSpatialCentroid implements Centroid<GeoSpatialFeature> {
 		lat = Math.toDegrees(Math.atan2(hyp, az));
 		
 		// create the centroid geospatial feature set
-		GeoSpatialFeature centroid = new GeoSpatialFeature(name);
+		GeoSpatialFeature centroid = new GeoSpatialFeature(label);
 		centroid.setValue(lat, lon);
 		centroid.setWeight(weight);
 	
@@ -113,19 +112,15 @@ public class GeoSpatialCentroid implements Centroid<GeoSpatialFeature> {
 	}
 
 	@Override
-	public void setName(String name) {
-		this.name = name;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	@Override
 	public String getName() {
-		return this.name;
+		return this.label;
 	}
 
-	@Override
-	public Class<GeoSpatialFeature> getType() {
-		return GeoSpatialFeature.class;
-	}
 
 	@Override
 	public void reset() {

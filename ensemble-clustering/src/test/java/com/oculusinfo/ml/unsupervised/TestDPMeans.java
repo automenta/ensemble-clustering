@@ -26,8 +26,7 @@ package com.oculusinfo.ml.unsupervised;
 
 import com.oculusinfo.ml.DataSet;
 import com.oculusinfo.ml.Instance;
-import com.oculusinfo.ml.feature.numeric.NumericVectorFeature;
-import com.oculusinfo.ml.feature.numeric.centroid.MeanNumericVectorCentroid;
+import com.oculusinfo.ml.feature.Feature;
 import com.oculusinfo.ml.feature.numeric.distance.EuclideanDistance;
 import com.oculusinfo.ml.unsupervised.cluster.Cluster;
 import com.oculusinfo.ml.unsupervised.cluster.ClusterResult;
@@ -37,32 +36,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.Random;
+import java.util.UUID;
 
 public class TestDPMeans extends JFrame {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9073044772934024066L;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		DataSet ds = new DataSet();
+		DataSet<UUID,String,double[]> ds = new DataSet();
 		
 		Random rnd = new Random();
 		
 		// randomly generate a dataset of lat, lon points
 		for (int i = 0; i < 100000; i ++) {
-			Instance inst = new Instance();
-			NumericVectorFeature v = new NumericVectorFeature("point");
-		
-			double x = rnd.nextDouble();
-			double y = rnd.nextDouble();
-			v.setValue( new double[] { x, y } );
-		
-			inst.addFeature(v);
+
+			Instance inst = Instance.newRandomUUID();
+			Feature<String,double[]> v = new Feature<>(
+					"point",
+					new double[] { rnd.nextDouble(), rnd.nextDouble() }
+			);
+
+			inst.add(v);
 			ds.add(inst);
 		}
 		
@@ -70,10 +65,10 @@ public class TestDPMeans extends JFrame {
 		clusterer.setThreshold(0.3);
 		clusterer.registerFeatureType(
 				"point", 
-				MeanNumericVectorCentroid.class, 
+				() -> new Feature(),
 				new EuclideanDistance(1.0));
 		
-		final ClusterResult clusters = clusterer.doCluster(ds);
+		final ClusterResult<UUID,String> clusters = clusterer.doCluster(ds);
 		
 		System.out.println(clusters.size());
 		
@@ -93,12 +88,12 @@ public class TestDPMeans extends JFrame {
                 
                 Random rnd = new Random();
 
-                for (Cluster cluster : clusters) {
+                for (Cluster<UUID,String,double[]> cluster : clusters) {
                 	Color c = new Color(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255));
-                	for (Instance inst : cluster.getMembers()) {
+                	for (Instance<UUID,String,double[]> inst : cluster.getMembers()) {
                 		g.setColor ( c );
-                		NumericVectorFeature v = (NumericVectorFeature)inst.getFeature("point");
-                		Ellipse2D l = new Ellipse2D.Double(v.getValue()[0] * 400.0, v.getValue()[1] * 400.0, 5, 5);
+                		double[] v = inst.getValue("point");
+                		Ellipse2D l = new Ellipse2D.Double(v[0] * 400.0, v[1] * 400.0, 5, 5);
                 		g2.draw(l);
                 	}
                 }

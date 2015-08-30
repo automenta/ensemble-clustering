@@ -49,20 +49,20 @@ public class TestKMeans extends JFrame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		DataSet ds = new DataSet();
+		DataSet<String> ds = new DataSet<String>();
 		
 		Random rnd = new Random();
 		
 		// randomly generate a dataset of lat, lon points
 		for (int i = 0; i < 100000; i ++) {
-			Instance inst = new Instance();
+			Instance<String> inst = new Instance<String>();
 			NumericVectorFeature v = new NumericVectorFeature("point");
 		
 			double x = rnd.nextDouble() * 400.0;
 			double y = rnd.nextDouble() * 400.0;
 			v.setValue( new double[] { x, y } );
 		
-			inst.addFeature(v);
+			inst.add(v);
 			ds.add(inst);
 		}
 		
@@ -90,7 +90,7 @@ public class TestKMeans extends JFrame {
                 
                 int color = 0;
                 for (Cluster cluster : clusters) {
-                	for (Instance inst : cluster.getMembers()) {
+                	for (Instance<String> inst : cluster.getMembers()) {
                 		g.setColor ( colors[color] );
                 		NumericVectorFeature v = (NumericVectorFeature)inst.getFeature("point");
                 		Ellipse2D l = new Ellipse2D.Double(v.getValue()[0], v.getValue()[1], 5, 5);

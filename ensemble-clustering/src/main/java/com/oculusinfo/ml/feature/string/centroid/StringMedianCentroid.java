@@ -43,7 +43,7 @@ import java.util.*;
  * @author slangevin
  *
  */
-public class StringMedianCentroid implements Centroid<StringFeature> {
+public class StringMedianCentroid<K> implements Centroid<StringFeature<K>> {
 	private static final long serialVersionUID = -251730602782817386L;
 	private static final int NUM_REFERENCE = 10;
 	private static final int NUM_TEST = 10;
@@ -52,7 +52,7 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 	private String[] referencePoints = new String[NUM_REFERENCE];
 	private String[] testPoints = new String[NUM_REFERENCE];
 	
-	private final Map<String, StringFeature> points = new HashMap<String, StringFeature>();
+	private final Map<K, StringFeature<K>> points = new LinkedHashMap<>();
 	
 	
 	private static class DistanceScore {
@@ -66,17 +66,17 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 	}
 	
 	@Override
-	public void add(StringFeature feature) {
+	public void add(StringFeature<K> feature) {
 		points.put(feature.getId(), feature);
 	}
 	
 	@Override
-	public void remove(StringFeature feature) {
+	public void remove(StringFeature<K>feature) {
 		points.remove(feature.getId());
 	}
 
 	@Override
-	public Collection<StringFeature> getAggregatableCentroid () {
+	public Collection<StringFeature<K>> getAggregatableCentroid () {
         return points.values();
     }
 	
@@ -84,10 +84,10 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 		int nr = Math.min(NUM_REFERENCE, points.size());
 		
 		// compute the distances of all points to the reference points
-		List<DistanceScore> distances = new LinkedList<DistanceScore>();
-		for (Map.Entry<String, StringFeature> stringStringFeatureEntry : points.entrySet()) {
+		List<DistanceScore> distances = new LinkedList<>();
+		for (Map.Entry<K, StringFeature<K>> stringStringFeatureEntry : points.entrySet()) {
 			double sum = 0;
-			StringFeature f = stringStringFeatureEntry.getValue();
+			StringFeature<K>f = stringStringFeatureEntry.getValue();
 			for (int i=0; i < nr; i++) {
 				sum += EditDistance.getNormLevenshteinDistance(referencePoints[i], f.getValue());
 			}
@@ -111,12 +111,12 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 		if (nt == 0) return "";
 		
 		// compute the distances of test points all points 
-		List<DistanceScore> distances = new LinkedList<DistanceScore>();
+		List<DistanceScore> distances = new ArrayList<>(nt);
 		for (int i=0; i < nt; i++) {
 			double sum = 0;
-			for (Map.Entry<String, StringFeature> stringStringFeatureEntry : points.entrySet()) {
-				StringFeature f = stringStringFeatureEntry.getValue();
-				sum += EditDistance.getNormLevenshteinDistance(testPoints[i], f.getName());
+			for (Map.Entry<K, StringFeature<K>> stringStringFeatureEntry : points.entrySet()) {
+				StringFeature<K>f = stringStringFeatureEntry.getValue();
+				sum += EditDistance.getNormLevenshteinDistance(testPoints[i], f.getValue());
 			}
 			distances.add(new DistanceScore(testPoints[i], sum));
 		}
@@ -131,7 +131,7 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 	private void setReferencePoints() {
 		int n = Math.min(NUM_REFERENCE, points.size());
 		
-		ArrayList<String> keys = new ArrayList<String>(points.keySet());
+		ArrayList<K> keys = new ArrayList<>(points.keySet());
 		Collections.shuffle(keys);
 		
 		for (int i=0; i < n; i++) {
@@ -140,8 +140,8 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 	}
 
 	@Override
-	public StringFeature getCentroid() {
-		StringFeature median = new StringFeature(name);
+	public StringFeature<K>getCentroid() {
+		StringFeature<K>median = new StringFeature(name);
 		
 		setReferencePoints();
 		computeTestPoints();
@@ -152,7 +152,7 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 	}
 
 	@Override
-	public void setName(String name) {
+	public void setLabel(String name) {
 		this.name = name;
 	}
 
@@ -161,10 +161,10 @@ public class StringMedianCentroid implements Centroid<StringFeature> {
 		return this.name;
 	}
 
-	@Override
-	public Class<StringFeature> getType() {
-		return StringFeature.class;
-	}
+//	@Override
+//	public Class<StringFeature<K>> getType() {
+//		return StringFeature.class;
+//	}
 
 	@Override
 	public void reset() {

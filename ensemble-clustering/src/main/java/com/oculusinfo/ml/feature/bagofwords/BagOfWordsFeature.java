@@ -40,30 +40,30 @@ import java.util.Collection;
  * @author slangevin
  *
  */
-public class BagOfWordsFeature extends Feature {
+public class BagOfWordsFeature<K> extends Feature<K, Object> {
 	private static final long serialVersionUID = 6927104885425283254L;
-	private FeatureFrequencyTable freqTable = new FeatureFrequencyTable();
+	private FeatureFrequencyTable<K> freqTable = new FeatureFrequencyTable();
 	
 	public BagOfWordsFeature() {
 		super();
 	}
 	
-	public BagOfWordsFeature(String name) {
+	public BagOfWordsFeature(K name) {
 		super(name);
 	}
 	
-	public void setCount(FeatureFrequency freq) {
+	public void setCount(FeatureFrequency<K> freq) {
 		freqTable.remove(freq);
 		freqTable.add(freq);
 	}
 	
-	public void setCount(String term, int count) {
-		FeatureFrequency freq = new FeatureFrequency(new StringFeature(term));
+	public void setCount(K term, int count) {
+		FeatureFrequency<K> freq = new FeatureFrequency(new StringFeature(term));
 		freq.frequency = count;
 		setCount(freq);
 	}
 	
-	public void incrementValue(String term) {
+	public void incrementValue(K term) {
 		freqTable.add(new StringFeature(term));
 	}
 	
@@ -71,12 +71,12 @@ public class BagOfWordsFeature extends Feature {
 		freqTable.decrement(new StringFeature(value));
 	}
 	
-	public FeatureFrequency getCount(String term) {
+	public FeatureFrequency<K> getCount(K term) {
 		return freqTable.get(new StringFeature(term));
 	}
 	
 	@JsonIgnore
-	public Collection<FeatureFrequency> getValues() {
+	public Collection<FeatureFrequency<K>> getValues() {
 		return freqTable.getAll();
 	}
 	
@@ -84,7 +84,7 @@ public class BagOfWordsFeature extends Feature {
 		return this.freqTable;
 	}
 	
-	public void setFreqTable(FeatureFrequencyTable table) {
+	public void setFreqTable(FeatureFrequencyTable<K> table) {
 		freqTable = table;
 	}
 	
@@ -93,7 +93,7 @@ public class BagOfWordsFeature extends Feature {
 		StringBuilder str = new StringBuilder();
 		str.append(this.getName()).append(":[");
 		int i=1;
-		for (FeatureFrequency f : freqTable.getAll()) {
+		for (FeatureFrequency<K> f : freqTable.getAll()) {
 			str.append(f.feature.getName()).append("=").append(f.frequency);
 			if (i < freqTable.getAll().size()) str.append(';');
 			i++;

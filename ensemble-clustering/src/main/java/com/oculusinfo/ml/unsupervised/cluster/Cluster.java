@@ -40,29 +40,30 @@ import java.util.*;
  *   
  * @author slangevin
  *
+ * K = key, F = feature key, V = feature value
  */
-public class Cluster extends Instance {
-	private static final long serialVersionUID = -1800048730067118377L;
+public class Cluster<K,F,V> extends Instance<K,F,V> {
+
 	
 	protected boolean onlineUpdate = false;  	// default to not updating centroid when new members are added
-	@SuppressWarnings("rawtypes")
-	protected final Map<String, Centroid> centroids = new HashMap<String, Centroid>();
-	protected final Set<Instance> members = new LinkedHashSet<Instance>();
 
-	public Cluster() {
-		super();
-	}
+	protected final Map<F,Centroid<F,V>> centroids = new HashMap<>();
+	protected final Set<Instance<K,F, V>> members = new LinkedHashSet<>();
+
+//	public Cluster() {
+//		super(UUID.randomUUID().toString());
+//	}
 	
 	@SuppressWarnings("rawtypes")
-	public Cluster(String id, Collection<FeatureTypeDefinition> types, boolean onlineUpdate) {
+	public Cluster(K id, Collection<FeatureValueDefinition<F,V>> types, boolean onlineUpdate) {
 		super(id);
 
 		//TODO determine size of the collections from 'types'.size()
-		for (FeatureTypeDefinition def : types) {
+		for (FeatureValueDefinition<F,V> def : types) {
 			try {
-				Centroid centroid = def.centroidClass.newInstance();
-				centroid.setName(def.featureName);
-				centroids.put(def.featureName, centroid);
+				Centroid<F,V> feature = def.builder.get();
+				feature.setName(def.featureName);
+				centroids.put(def.featureName, feature);
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 				e.printStackTrace();
@@ -75,28 +76,30 @@ public class Cluster extends Instance {
 	@SuppressWarnings("rawtypes")
 	public void reset() {
 		this.members.clear();
-		for (Map.Entry<String, Centroid> stringCentroidEntry : centroids.entrySet()) {
+		centroids.forEach((o, centroid) -> {
 			try {
-				Centroid centroid = stringCentroidEntry.getValue();
 				centroid.reset();
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 				e.printStackTrace();
 			}
-		}
+		});
+
 	}
 	
 	public void updateCentroid() {
-		for (Map.Entry<String, Centroid> stringCentroidEntry : centroids.entrySet()) {
-			addFeature(stringCentroidEntry.getValue().getCentroid());
+		for (Map.Entry<F, Centroid<F,V>> stringCentroidEntry : centroids.entrySet()) {
+			Centroid<F,V> vv = stringCentroidEntry.getValue();
+			add(vv.getCentroid());
 		}
 	}
-	
+
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected void updateCentroids(Instance inst, boolean removefrom) {
-		for (Map.Entry<String, Centroid> stringCentroidEntry : centroids.entrySet()) {
-			Centroid m = stringCentroidEntry.getValue();
-			Feature feature = inst.getFeature(stringCentroidEntry.getKey());
+	protected void updateCentroids(Instance<K,F,V> inst, boolean removefrom) {
+		for (Map.Entry<F, Centroid<F,V>> e : centroids.entrySet()) {
+			Centroid m = e.getValue();
+			Feature<F, V> feature = inst.getFeature(e.getKey());
 			if (feature != null) {
 				if (removefrom) {
 					m.remove(feature);
@@ -106,25 +109,25 @@ public class Cluster extends Instance {
 				}
 				
 				if (onlineUpdate) {
-					addFeature(m.getCentroid());
+					add(m.getCentroid());
 				}
 			}
 		}
 	}
 	
-	public boolean add(Instance inst) {	
+	public boolean add(Instance<K,F,V> inst) {
 		boolean isNew = members.add(inst);
 		updateCentroids(inst, false);
 		return isNew;
 	}
 	
-	public boolean remove(Instance inst) {
+	public boolean remove(Instance<K,F,V> inst) {
 		boolean isAltered = members.remove(inst);
 		updateCentroids(inst, false);
 		return isAltered;
 	}
 	
-	public boolean replace(Instance oldValue, Instance newValue) {
+	public boolean replace(Instance<K,F,V> oldValue, Instance<K,F,V> newValue) {
 		boolean altered = remove(oldValue);
 		
 		if (altered) {
@@ -145,33 +148,35 @@ public class Cluster extends Instance {
 	
 	@SuppressWarnings("rawtypes")
 	@JsonIgnore
-	public Map<String, Centroid> getCentroids() {
+	public Map<F, Centroid<F,V>> getCentroids() {
 		return centroids;
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@JsonIgnore
-	public void setCentroids(Map<String, Centroid> centroids) {
+	public void setCentroids(Map<F, Centroid<F,V>> centroids) {
 		this.centroids.putAll(centroids);
 	}
 	
-	public Set<Instance> getMembers() {
+	public Set<Instance<K,F,V>> getMembers() {
 		return members;
 	}
 	
-	public void setMembers(Set<Instance> members) {
+	public void setMembers(Set<Instance<K,F,V>> members) {
 		this.members.addAll(members);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	@JsonIgnore
-	public Collection<FeatureTypeDefinition> getTypeDefs() {
-		Collection<FeatureTypeDefinition> typedefs = new LinkedList<FeatureTypeDefinition>();
-		for (Centroid centroid : centroids.values()) {
-			typedefs.add(new FeatureTypeDefinition(centroid.getName(), centroid.getClass(), null));
-		}
-		return typedefs;
-	}
+//	@SuppressWarnings("rawtypes")
+//	@JsonIgnore
+//	public Collection<FeatureValueDefinition<F,V>> getTypeDefs() {
+//		Collection<FeatureValueDefinition<F,V>> typedefs = new LinkedList<>();
+//		for (Centroid<F,V> centroid : centroids.values()) {
+//			typedefs.add(new FeatureValueDefinition(centroid.getName(),
+//					centroid.builder(),
+//					null));
+//		}
+//		return typedefs;
+//	}
 
 	public int size() {
 		return members.size();

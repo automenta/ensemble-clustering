@@ -37,13 +37,13 @@ import java.util.*;
  */
 public class NormMutualInformation {
 
-	private Map<String, Collection<Instance>> getEvents(Collection<Cluster> clusters) {
-		Map<String, Collection<Instance>> events = new HashMap<String, Collection<Instance>>();
+	private Map<String, Collection<Instance<String>>> getEvents(Collection<Cluster> clusters) {
+		Map<String, Collection<Instance<String>>> events = new HashMap<>();
 		
 		for (Cluster c : clusters) {
-			for (Instance inst : c.getMembers()) {
+			for (Instance<String> inst : c.getMembers()) {
 				if (events.containsKey(inst.getClassLabel()) == false) {
-					events.put(inst.getClassLabel(), new ArrayList<Instance>());
+					events.put(inst.getClassLabel(), new ArrayList<>());
 				}
 				events.get(inst.getClassLabel()).add(inst);
 			}
@@ -51,18 +51,18 @@ public class NormMutualInformation {
 		return events;
 	}
 	
-	private double getNormFactor(int numInstances, Collection<Instance> instances) {
+	private double getNormFactor(int numInstances, Collection<Instance<String>> instances) {
 		double val = ((double)instances.size() / numInstances);
 		double norm = val * Math.log(val);
 		return norm;
 	}
 	
-	private double getMI(int numInstances, Collection<Instance> event, Collection<Cluster> clusters) {
+	private double getMI(int numInstances, Collection<Instance<String>> event, Collection<Cluster> clusters) {
 		double mi = 0;
 		
 		for (Cluster c : clusters) {
 			// calc the intersection of the event with the cluster
-			Set<Instance> intersect = new HashSet<Instance>(c.getMembers());
+			Set<Instance<String>> intersect = new HashSet<>(c.getMembers());
 			intersect.retainAll(event);
 			
 			if (intersect.isEmpty()) continue;
@@ -79,8 +79,8 @@ public class NormMutualInformation {
 		double norm = 0, factor1 = 0, factor2 = 0, mi = 0;
 		
 		// calculate the total number of instances
-		Map<String, Collection<Instance>> events = getEvents(clusters);
-		for (Collection<Instance> e : events.values()) {
+		Map<String, Collection<Instance<String>>> events = getEvents(clusters);
+		for (Collection<Instance<String>> e : events.values()) {
 			numInstances += e.size();
 		}
 		
@@ -88,13 +88,13 @@ public class NormMutualInformation {
 		for (Cluster c : clusters) {
 			factor1 += getNormFactor(numInstances, c.getMembers());
 		}
-		for (Collection<Instance> e : events.values()) {
+		for (Collection<Instance<String>> e : events.values()) {
 			factor2 += getNormFactor(numInstances, e);
 		}
 		norm = 0.5 * (-1 * factor1 - factor2);
 		
 		// calculate the mutual information for all events and clusters
-		for (Map.Entry<String, Collection<Instance>> stringCollectionEntry : events.entrySet()) {
+		for (Map.Entry<String, Collection<Instance<String>>> stringCollectionEntry : events.entrySet()) {
 			mi += getMI(numInstances, stringCollectionEntry.getValue(), clusters);
 		}
 		// return normalized nmi

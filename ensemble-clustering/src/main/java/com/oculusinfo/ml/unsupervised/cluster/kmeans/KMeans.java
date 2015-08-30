@@ -42,7 +42,7 @@ import java.util.List;
  * @author slangevin
  *
  */
-public class KMeans extends AbstractClusterer {
+abstract public class KMeans<K,F,V> extends AbstractClusterer<K,F,V> {
 	
 	protected final int k;
 	protected final int maxIterations;
@@ -79,14 +79,14 @@ public class KMeans extends AbstractClusterer {
 	 * @param ds
 	 * @return the initial kmeans
 	 */
-	private List<Cluster> initKMeans(DataSet ds) {
+	private List<Cluster<K,F,V>> initKMeans(DataSet<K,F,V> ds) {
 		final int MAX_ATTEMPT = 3;
-		List<Cluster> kmeans = new LinkedList<Cluster>();
+		List<Cluster<K,F,V>> kmeans = new LinkedList<>();
 		
 		int ki = (ds.size() < k) ? ds.size(): k;
 		
 		// randomly pick k instances as the initial k means
-		ArrayList<String> keys = new ArrayList<String>(ds.getKeys());
+		ArrayList<K> keys = new ArrayList<>(ds.getKeys());
 		
 	    // select first cluster with a uniform distribution
 	    Collections.shuffle(keys);
@@ -100,9 +100,9 @@ public class KMeans extends AbstractClusterer {
 	    
     	while (kmeans.size() < ki && iteration < MAX_ATTEMPT) {
     		for (int i = 1; i < keys.size(); i++) {
-    			String key = keys.get(i);
+				K key = keys.get(i);
     			if (key == null) continue;  // skip over already used keys
-    			Instance inst = ds.get(key);
+    			Instance<K,F,V> inst = ds.get(key);
     			double min = Double.MAX_VALUE;
     			
     			for (Cluster c : kmeans) {
@@ -127,10 +127,16 @@ public class KMeans extends AbstractClusterer {
     	
 	    return kmeans;
 	}
-	
+
 	@Override
-	public ClusterResult doCluster(DataSet ds) {	
-		List<Cluster> kmeans = initKMeans(ds);
+	protected boolean isCandidate(Instance<K, F, V> inst, Cluster candidate, double score, Cluster best, double bestScore) {
+		return true; //(score < bestScore);
+	}
+
+
+	@Override
+	public ClusterResult<K,V> doCluster(DataSet<K,F,V> ds) {
+		List<Cluster<K,F,V>> kmeans = initKMeans(ds);
 		
 		double start = System.currentTimeMillis();
 		
@@ -168,10 +174,5 @@ public class KMeans extends AbstractClusterer {
 		return new InMemoryClusterResult(kmeans);
 	}
 
-	@Override
-	protected boolean isCandidate(Instance inst, Cluster candidate,
-			double score, Cluster best, double bestScore) {
-		return true; //(score < bestScore);
-	}
 
 }

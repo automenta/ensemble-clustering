@@ -60,11 +60,11 @@ public class Hierarchical {
 		return f;
 	}
 	
-	public Score bestFmeasure(String label, double labelCount, Collection<? extends Instance> group) {
+	public Score bestFmeasure(String label, double labelCount, Collection<? extends Instance<String>> group) {
 		Score score = new Score(), best = new Score();
 		double lcount = 0, count = 0;
 		
-		for (Instance i : group) {	
+		for (Instance<String> i : group) {
 			if (i instanceof Cluster) {
 				// calculate stats for this cluster
 				lcount += labelCount(label, ((Cluster) i).getMembers());
@@ -89,10 +89,10 @@ public class Hierarchical {
 		return best;
 	}
 	
-	public int labelCount(String label, Collection<? extends Instance> group) {
+	public int labelCount(String label, Collection<? extends Instance<String>> group) {
 		int count = 0;
 		
-		for (Instance i : group) {
+		for (Instance<String> i : group) {
 			if (i instanceof Cluster) {
 				count += labelCount(label, ((Cluster)i).getMembers());
 			}
@@ -103,10 +103,10 @@ public class Hierarchical {
 		return count;
 	}
 	
-	public int instanceCount(Collection<? extends Instance> group) {
+	public int instanceCount(Collection<? extends Instance<String>> group) {
 		int count = 0;
 		
-		for (Instance i : group) {
+		for (Instance<String> i : group) {
 			if (i instanceof Cluster) {
 				count += instanceCount(((Cluster)i).getMembers());
 			}

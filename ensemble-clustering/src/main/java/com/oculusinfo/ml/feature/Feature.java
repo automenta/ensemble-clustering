@@ -36,24 +36,40 @@ import java.io.Serializable;
  *  
  * @author slangevin
  *
+ * F is the type of key used to index them
  */
-public abstract class Feature implements Serializable {
+public class Feature<F, V> implements Serializable {
     private static final long serialVersionUID = 192274668774344842L;
     
     // the unique name of the feature
-    protected String          name;
+    protected F name;
    
     // The weight of this feature
     private double            weight;
+	private V value;
 
 	public Feature() {
 		// empty constructor
 	    this.weight = 1.0;
 	}
 
-	public Feature(String name) {
+	public Feature(F name) {
+		this(name, 10);
+	}
+
+	public Feature(F name, double weight) {
 		this.name = name;
-        this.weight = 1.0;
+        this.weight = weight;
+	}
+
+	public Feature(F name, V value) {
+		this(name, 1.0);
+		setValue(value);
+	}
+
+	public Feature(F name, V value, double weight) {
+		this(name, weight);
+		setValue(value);
 	}
 
 	public double getWeight () {
@@ -64,21 +80,29 @@ public abstract class Feature implements Serializable {
 	    this.weight = weight;
 	}
 
-	public String getName() {
+	public F getName() {
 		return name;
 	}
 	
-	public void setName(String name) {
+	public void setName(F name) {
 		this.name = name;
 	}
 	
 	@JsonIgnore
-	public String getId() {
+	public F getId() {
 		return name;
 	}
 	
 	@Override
 	public int hashCode() {
 		return name.hashCode();
+	}
+
+	public V getValue() {
+		return value;
+	}
+
+	public void setValue(V newValue) {
+		this.value = newValue;
 	}
 }

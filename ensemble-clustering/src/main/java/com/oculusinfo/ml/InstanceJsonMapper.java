@@ -44,16 +44,16 @@ public class InstanceJsonMapper {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final JsonFactory factory = new JsonFactory();
 
-    public static Instance fromJson(String jsonAsString)
+    public static <K> Instance<K> fromJson(String jsonAsString)
     	throws IOException {
     
     	mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-    	Instance inst = mapper.readValue(jsonAsString, Instance.class);
+    	Instance<K> inst = mapper.readValue(jsonAsString, Instance.class);
     	
     	return inst;
     }
 
-    public static String toJson(Instance inst, boolean prettyPrint) 
+    public static String toJson(Instance<String> inst, boolean prettyPrint)
     	throws IOException {
         
     	StringWriter writer = new StringWriter();

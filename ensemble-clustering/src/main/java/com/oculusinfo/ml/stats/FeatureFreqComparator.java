@@ -26,9 +26,14 @@ package com.oculusinfo.ml.stats;
 
 import java.util.Comparator;
 
-public class FeatureFreqComparator implements Comparator<FeatureFrequency> {
-	@Override
-    public int compare(final FeatureFrequency f1, final FeatureFrequency f2) {
+final public class FeatureFreqComparator implements Comparator<FeatureFrequency> {
+
+    FeatureFreqComparator() { }
+
+    @Override
+    public final int compare(final FeatureFrequency f1, final FeatureFrequency f2) {
         return f2.frequency - f1.frequency;
     }
+
+    public static final FeatureFreqComparator the = new FeatureFreqComparator();
 }

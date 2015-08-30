@@ -37,13 +37,13 @@ import java.util.Date;
  * @author slangevin
  *
  */
-public class TemporalMinMaxCentroid implements Centroid<TemporalFeature> {
+public class TemporalMinMaxCentroid<K> implements Centroid<TemporalFeature<K>> {
 	private static final long serialVersionUID = 845737125746792593L;
 	private String name;
 	private long cstart = 0, cend = 0;
 	
 	@Override
-	public void add(TemporalFeature feature) {
+	public void add(TemporalFeature<K> feature) {
 		long start = 0, end = 0;
 		
 		start = feature.getStart().getTime();
@@ -55,25 +55,25 @@ public class TemporalMinMaxCentroid implements Centroid<TemporalFeature> {
 	}
 	
 	@Override
-	public void remove(TemporalFeature feature) {
+	public void remove(TemporalFeature<K> feature) {
 		// TODO Should give the second smallest start and second largest end to revise
 	}
 
 	@Override
-	public Collection<TemporalFeature> getAggregatableCentroid () {
+	public Collection<TemporalFeature<K>> getAggregatableCentroid () {
 	    return Collections.singleton(getCentroid());
 	}
 
 	@Override
-	public TemporalFeature getCentroid() {
+	public TemporalFeature<K> getCentroid() {
 		// create the centroid temporal feature set
-		TemporalFeature centroid = new TemporalFeature(name);
+		TemporalFeature<K> centroid = new TemporalFeature(name);
 		centroid.setValue(new Date(cstart), new Date(cend));
 		return centroid;
 	}
 
 	@Override
-	public void setName(String name) {
+	public void setLabel(String name) {
 		this.name = name;
 	}
 
@@ -82,10 +82,6 @@ public class TemporalMinMaxCentroid implements Centroid<TemporalFeature> {
 		return this.name;
 	}
 
-	@Override
-	public Class<TemporalFeature> getType() {
-		return TemporalFeature.class;
-	}
 
 	@Override
 	public void reset() {
